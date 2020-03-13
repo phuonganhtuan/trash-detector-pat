@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.example.trashdetector.R
+import com.example.trashdetector.ui.about.AboutDialogFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -42,6 +44,7 @@ class InformationFragment private constructor() : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupData()
+        setEvents()
     }
 
     private fun setupData() {
@@ -69,10 +72,31 @@ class InformationFragment private constructor() : BottomSheetDialogFragment() {
             layoutTrash.background = bg3
             imageTrash.setImageResource(R.drawable.tai_che)
         }
+    }
 
+    private fun setEvents() {
+        cardTrash1.setOnClickListener {
+            showComing()
+        }
+        cardTrash2.setOnClickListener {
+            showComing()
+        }
+        cardTrash3.setOnClickListener {
+            showComing()
+        }
+        iconAbout.setOnClickListener {
+            AboutDialogFragment.newInstance().show(activity!!.supportFragmentManager, ABOUT_TAG)
+        }
+    }
+
+    private fun showComing() {
+        Toast.makeText(context, "Comming soon!", Toast.LENGTH_SHORT).show()
     }
 
     companion object {
+
+        private const val ABOUT_TAG = "About"
+
         fun newInstance() = InformationFragment()
     }
 }
