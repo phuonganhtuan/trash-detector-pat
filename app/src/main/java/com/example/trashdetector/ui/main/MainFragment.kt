@@ -23,13 +23,14 @@ import com.example.trashdetector.base.ViewModelFactory
 import com.example.trashdetector.data.model.History
 import com.example.trashdetector.data.repository.HistoryRepository
 import com.example.trashdetector.data.room.AppDatabase
+import com.example.trashdetector.theme.DarkModeInterface
+import com.example.trashdetector.theme.DarkModeUtil
 import com.example.trashdetector.ui.information.InformationFragment
 import com.example.trashdetector.ui.result.ResultDialogFragment
 import com.example.trashdetector.utils.ImageUtils
 import kotlinx.android.synthetic.main.main_fragment.*
 
-
-class MainFragment private constructor() : Fragment(), SurfaceListener {
+class MainFragment : Fragment(), SurfaceListener, DarkModeInterface {
 
     private lateinit var viewModel: MainViewModel
 
@@ -56,6 +57,7 @@ class MainFragment private constructor() : Fragment(), SurfaceListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        if (DarkModeUtil.isDarkMode) enableDarkMode() else disableDarkMode()
         initViewModel()
         prepareCamera()
         setEvents()
@@ -74,6 +76,24 @@ class MainFragment private constructor() : Fragment(), SurfaceListener {
 
     override fun onSurfaceTextureAvailable(surface: SurfaceTexture?, width: Int, height: Int) {
         openCamera()
+    }
+
+    override fun enableDarkMode() {
+        context?.let {
+            layoutTitle.background = it.getDrawable(R.drawable.bg_dark)
+            layoutBottom.background = it.getDrawable(R.drawable.bg_dark)
+            iconDarkMode.background = it.getDrawable(R.drawable.bg_ripple_black)
+        }
+        iconDarkMode.setImageResource(R.drawable.ic_light_mode)
+    }
+
+    override fun disableDarkMode() {
+        context?.let {
+            layoutTitle.background = it.getDrawable(R.drawable.bg_light)
+            layoutBottom.background = it.getDrawable(R.drawable.bg_light)
+            iconDarkMode.background = it.getDrawable(R.drawable.bg_ripple_white)
+        }
+        iconDarkMode.setImageResource(R.drawable.ic_dark_mode)
     }
 
     private fun initViewModel() {
@@ -139,12 +159,14 @@ class MainFragment private constructor() : Fragment(), SurfaceListener {
             InformationFragment.newInstance()
                 .show(activity!!.supportFragmentManager, INFORMATION_TAG)
         }
-        buttonCapture.setOnClickListener {
-            onCaptureClick()
-        }
-        cardViewCamera.setOnClickListener {
-            onCaptureClick()
-        }
+        buttonCapture.setOnClickListener { onCaptureClick() }
+        cardViewCamera.setOnClickListener { onCaptureClick() }
+        iconDarkMode.setOnClickListener { handleDarkMode() }
+    }
+
+    private fun handleDarkMode() = with(DarkModeUtil) {
+        isDarkMode = !isDarkMode
+        activity?.recreate()
     }
 
     private fun onCaptureClick() {
@@ -202,7 +224,5 @@ class MainFragment private constructor() : Fragment(), SurfaceListener {
         private const val REQUEST_CODE = 8898
         private const val RESULT_TAG = "Result"
         private const val INFORMATION_TAG = "Information"
-
-        fun newInstance() = MainFragment()
     }
 }

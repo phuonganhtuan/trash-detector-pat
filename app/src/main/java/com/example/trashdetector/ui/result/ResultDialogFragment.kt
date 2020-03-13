@@ -10,13 +10,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.example.trashdetector.R
+import com.example.trashdetector.theme.DarkModeInterface
+import com.example.trashdetector.theme.DarkModeUtil
 import kotlinx.android.synthetic.main.result_dialog_fragment.*
 
 class ResultDialogFragment
 private constructor(
     private val image: Bitmap,
     private val type: String
-) : DialogFragment() {
+) : DialogFragment(), DarkModeInterface {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,12 +31,25 @@ private constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (DarkModeUtil.isDarkMode) enableDarkMode() else disableDarkMode()
         imageOutput.setImageBitmap(image)
         imageFullScreen.setImageBitmap(image)
         imageOutput.rotation = 90f
         imageFullScreen.rotation = 90f
         textResult.text = type
         setEvents()
+    }
+
+    override fun enableDarkMode() {
+        layoutRootResult.background = context?.getDrawable(R.drawable.bg_rounded_black)
+        buttonDetail.background = context?.getDrawable(R.drawable.bg_ripple_black)
+        buttonCancel.background = context?.getDrawable(R.drawable.bg_ripple_black)
+    }
+
+    override fun disableDarkMode() {
+        layoutRootResult.background = context?.getDrawable(R.drawable.bg_rounded)
+        buttonDetail.background = context?.getDrawable(R.drawable.bg_ripple_white)
+        buttonCancel.background = context?.getDrawable(R.drawable.bg_ripple_white)
     }
 
     private fun setEvents() {
