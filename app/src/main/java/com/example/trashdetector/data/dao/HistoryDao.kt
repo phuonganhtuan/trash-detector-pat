@@ -1,6 +1,7 @@
 package com.example.trashdetector.data.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
@@ -14,4 +15,6 @@ interface HistoryDao {
     suspend fun insertHistory(history: History)
     @Query("SELECT * FROM $DATABASE_NAME")
     suspend fun getHistories(): List<History>
+    @Query("DELETE FROM $DATABASE_NAME")
+    suspend fun resetHistory()
 }

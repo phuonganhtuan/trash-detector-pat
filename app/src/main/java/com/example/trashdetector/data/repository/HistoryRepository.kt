@@ -7,4 +7,5 @@ class HistoryRepository(private val dao: HistoryDao) : HistoryRepositoryInterfac
 
     override suspend fun getHistories() = dao.getHistories()
     override suspend fun insertHistory(history: History) = dao.insertHistory(history)
+    override suspend fun resetHistory() = dao.resetHistory()
 }

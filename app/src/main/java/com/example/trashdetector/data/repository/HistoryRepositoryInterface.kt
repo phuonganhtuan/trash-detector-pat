@@ -6,4 +6,5 @@ interface HistoryRepositoryInterface {
 
     suspend fun getHistories(): List<History>
     suspend fun insertHistory(history: History)
+    suspend fun resetHistory()
 }

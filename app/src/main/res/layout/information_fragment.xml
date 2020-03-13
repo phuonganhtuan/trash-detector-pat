@@ -11,14 +11,28 @@
     <TextView
         android:id="@+id/textTitle"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="36dp"
         android:layout_above="@id/recyclerHistory"
         android:layout_marginStart="24dp"
         android:layout_marginBottom="24dp"
+        android:gravity="center_vertical"
         android:text="@string/title_history"
-        android:textSize="28sp"
+        android:textSize="24dp"
         android:textStyle="bold"
-        tools:ignore="RelativeOverlap" />
+        tools:ignore="RelativeOverlap,SpUsage" />
+
+    <ImageView
+        android:id="@+id/iconDelete"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignTop="@id/textTitle"
+        android:layout_alignBottom="@id/textTitle"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@id/textTitle"
+        android:background="@drawable/bg_ripple_white"
+        android:contentDescription="@null"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_delete" />
 
     <ImageView
         android:id="@+id/iconAbout"
@@ -32,10 +46,24 @@
         android:scaleType="centerInside"
         android:src="@drawable/ic_about" />
 
+    <TextView
+        android:id="@+id/textEmptyHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/recyclerHistory"
+        android:layout_alignTop="@id/recyclerHistory"
+        android:layout_alignEnd="@id/recyclerHistory"
+        android:layout_alignBottom="@id/recyclerHistory"
+        android:gravity="center"
+        android:text="@string/title_empty_history"
+        android:textColor="#999999"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerHistory"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_above="@id/textType"
         android:layout_marginBottom="32dp"
         android:orientation="horizontal"
@@ -44,15 +72,16 @@
     <TextView
         android:id="@+id/textType"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="36dp"
         android:layout_above="@id/cardTrash1"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="24dp"
+        android:gravity="center_vertical"
         android:text="@string/title_information"
-        android:textSize="28sp"
+        android:textSize="24dp"
         android:textStyle="bold"
-        tools:ignore="RelativeOverlap" />
+        tools:ignore="RelativeOverlap,SpUsage" />
 
     <View
         android:id="@+id/viewBottom"

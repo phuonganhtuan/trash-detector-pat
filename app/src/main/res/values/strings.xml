@@ -14,4 +14,6 @@
         Author:\nPhương Anh Tuấn (UET-VNU)\n\nỨng dụng: Trash Detector\nPhiên bản: 1.0
     </string>
     <string name="title_history">Lịch sử nhận diện</string>
+    <string name="title_reset">Đã xóa lịch sử nhận diện</string>
+    <string name="title_empty_history">Chưa có dữ liệu</string>
 </resources>
