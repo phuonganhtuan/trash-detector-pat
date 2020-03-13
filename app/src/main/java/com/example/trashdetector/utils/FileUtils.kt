@@ -1,6 +1,5 @@
 package com.example.trashdetector.utils
 
-import android.util.Log
 import java.io.*
 
 object FileUtils {
@@ -9,7 +8,6 @@ object FileUtils {
         val directory = File(dirPath)
         if (!directory.exists()) {
             directory.mkdirs()
-            Log.i("filea", directory.absolutePath)
         }
     }
 
@@ -20,7 +18,6 @@ object FileUtils {
             bufferedWriter.write(string)
             bufferedWriter.close()
         }
-        Log.i("filea", file.absolutePath)
     }
 
     fun readStringFromFile(filePath: String): String? {

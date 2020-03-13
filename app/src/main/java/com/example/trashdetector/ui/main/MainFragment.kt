@@ -1,10 +1,13 @@
 package com.example.trashdetector.ui.main
 
 import android.Manifest
+import android.Manifest.permission.CAMERA
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
+import android.hardware.Camera
 import android.hardware.camera2.*
 import android.media.Image
 import android.media.ImageReader
@@ -15,11 +18,11 @@ import android.view.LayoutInflater
 import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.trashdetector.MainActivity.Companion.PERMISSION_CAMERA_CODE
+import com.example.trashdetector.MainActivity.Companion.PERMISSION_WRITE_CODE
 import com.example.trashdetector.R
 import com.example.trashdetector.base.ViewModelFactory
 import com.example.trashdetector.data.model.History
@@ -177,8 +180,24 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface {
     }
 
     private fun handleDarkMode() = with(DarkModeUtil) {
-        isDarkMode = !isDarkMode
-        updateLocalDarkMode()
+        if (ActivityCompat.checkSelfPermission(
+                context!!,
+                WRITE_EXTERNAL_STORAGE
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            val permissions = arrayOf(WRITE_EXTERNAL_STORAGE)
+            requestPermissions(permissions, PERMISSION_WRITE_CODE)
+        }
+        if (ActivityCompat.checkSelfPermission(
+                context!!,
+                WRITE_EXTERNAL_STORAGE
+            )
+            == PackageManager.PERMISSION_GRANTED
+        ) {
+            isDarkMode = !isDarkMode
+            updateLocalDarkMode()
+        }
     }
 
     private fun updateLocalDarkMode() {
@@ -198,10 +217,24 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface {
     }
 
     private fun onCaptureClick() {
-        buttonCapture.isEnabled = false
-        cardCaptureEffect.visibility = View.VISIBLE
-        detectProgress.visibility = View.VISIBLE
-        detectTrash()
+        if (ActivityCompat.checkSelfPermission(
+                context!!,
+                CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            val permissions = arrayOf(CAMERA)
+            requestPermissions(permissions, PERMISSION_CAMERA_CODE)
+        }
+        if (ActivityCompat.checkSelfPermission(
+                context!!,
+                CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            buttonCapture.isEnabled = false
+            cardCaptureEffect.visibility = View.VISIBLE
+            detectProgress.visibility = View.VISIBLE
+            detectTrash()
+        }
     }
 
     private fun detectTrash() {
