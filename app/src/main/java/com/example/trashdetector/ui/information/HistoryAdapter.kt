@@ -9,6 +9,7 @@ import com.example.trashdetector.base.diffutil.BaseViewHolder
 import com.example.trashdetector.base.diffutil.HistoryDiffUtil
 import com.example.trashdetector.data.model.History
 import com.example.trashdetector.utils.ImageUtils
+import com.example.trashdetector.utils.TimeUtils
 import kotlinx.android.synthetic.main.history_item.view.*
 import kotlinx.android.synthetic.main.trash_item.view.*
 
@@ -32,7 +33,7 @@ class HistoryAdapter(diffCallback: HistoryDiffUtil = HistoryDiffUtil()) :
             this.itemData = itemData
             itemView.apply {
                 textType.text = itemData.type
-                textTimeStamp.text = itemData.time
+                textTimeStamp.text = TimeUtils.timeToString(itemData.time.toLong())
                 imageHistory.setImageBitmap(ImageUtils.getBitmap(itemData.image))
                 imageHistory.rotation = 90f
             }
