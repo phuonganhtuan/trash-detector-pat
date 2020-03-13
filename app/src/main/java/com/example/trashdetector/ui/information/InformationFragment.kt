@@ -1,4 +1,4 @@
-package com.example.trashdetector.ui.pages
+package com.example.trashdetector.ui.information
 
 import android.app.Dialog
 import android.os.Bundle
@@ -7,7 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.example.trashdetector.R
+import com.example.trashdetector.base.ViewModelFactory
+import com.example.trashdetector.data.repository.HistoryRepository
+import com.example.trashdetector.data.room.AppDatabase
 import com.example.trashdetector.ui.about.AboutDialogFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -18,6 +23,12 @@ import kotlinx.android.synthetic.main.trash_item.view.*
 class InformationFragment private constructor() : BottomSheetDialogFragment() {
 
     private lateinit var viewModel: InformationViewModel
+
+    private val historyAdapter by lazy { HistoryAdapter() }
+
+    private val historyRepository by lazy {
+        context?.let { HistoryRepository(AppDatabase.invoke(it).historyDao()) }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,8 +54,17 @@ class InformationFragment private constructor() : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initViewModel()
         setupData()
         setEvents()
+    }
+
+    private fun initViewModel() {
+        historyRepository?.let {
+            viewModel = ViewModelProviders.of(
+                this,
+                ViewModelFactory { InformationViewModel(it) }).get(InformationViewModel::class.java)
+        }
     }
 
     private fun setupData() {
@@ -72,6 +92,19 @@ class InformationFragment private constructor() : BottomSheetDialogFragment() {
             layoutTrash.background = bg3
             imageTrash.setImageResource(R.drawable.tai_che)
         }
+        setupHistoryList()
+        viewModel.getHistories()
+        observeData()
+    }
+
+    private fun setupHistoryList() {
+        recyclerHistory.adapter = historyAdapter
+    }
+
+    private fun observeData() = with(viewModel) {
+        historyList.observe(viewLifecycleOwner, Observer {
+            historyAdapter.submitList(it.asReversed())
+        })
     }
 
     private fun setEvents() {

@@ -23,7 +23,7 @@ import com.example.trashdetector.base.ViewModelFactory
 import com.example.trashdetector.data.model.History
 import com.example.trashdetector.data.repository.HistoryRepository
 import com.example.trashdetector.data.room.AppDatabase
-import com.example.trashdetector.ui.pages.InformationFragment
+import com.example.trashdetector.ui.information.InformationFragment
 import com.example.trashdetector.ui.result.ResultDialogFragment
 import com.example.trashdetector.utils.ImageUtils
 import kotlinx.android.synthetic.main.main_fragment.*
@@ -191,7 +191,7 @@ class MainFragment private constructor() : Fragment(), SurfaceListener {
         val history = History(
             type = type,
             time = System.currentTimeMillis().toString(),
-            image = ImageUtils.getStringFromImage(image)
+            image = ImageUtils.getStringFromBitmap(ImageUtils.getBitmap(image))
         )
         viewModel.insertHistory(history)
     }

@@ -6,16 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".ui.pages.InformationFragment">
+    tools:context=".ui.information.InformationFragment">
 
     <TextView
         android:id="@+id/textTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_above="@id/recyclerHistory"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/title_information"
+        android:layout_marginBottom="24dp"
+        android:text="@string/title_history"
         android:textSize="28sp"
         android:textStyle="bold"
         tools:ignore="RelativeOverlap" />
@@ -32,18 +32,27 @@
         android:scaleType="centerInside"
         android:src="@drawable/ic_about" />
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@id/textType"
+        android:layout_marginBottom="32dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    <TextView
+        android:id="@+id/textType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_above="@id/cardTrash1"
-        android:layout_below="@id/textTitle"
-        android:layout_margin="24dp"
-        android:gravity="center_vertical"
-        android:justificationMode="inter_word"
-        android:text="@string/title_trash_description"
-        android:textColor="#999999"
-        android:textSize="16sp"
-        tools:targetApi="o" />
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/title_information"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        tools:ignore="RelativeOverlap" />
 
     <View
         android:id="@+id/viewBottom"
@@ -59,7 +68,7 @@
         android:layout_above="@id/viewBottom"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="32dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
@@ -80,7 +89,7 @@
         android:layout_above="@id/cardTrash3"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="16dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
@@ -101,7 +110,7 @@
         android:layout_above="@id/cardTrash2"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="16dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
