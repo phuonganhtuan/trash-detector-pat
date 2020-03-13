@@ -12,19 +12,28 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
+    <style name="AppThemeDark" parent="AppTheme">
+        <item name="android:colorBackground">@android:color/black</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:statusBarColor">@android:color/black</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
     <style name="ItemShadowStyle" parent="AppTheme">
         <item name="android:outlineSpotShadowColor" tools:targetApi="p">#222222</item>
         <item name="android:elevation">12dp</item>
-    </style>
-
-    <style name="BottomSheet" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@android:color/white</item>
     </style>
 
     <style name="DialogStyle" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
         <item name="android:windowIsFloating">false</item>
         <item name="android:statusBarColor">@android:color/white</item>
         <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="DialogDark" parent="AppThemeDark">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/black</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
     <style name="ItemClickEffect" parent="AppTheme">

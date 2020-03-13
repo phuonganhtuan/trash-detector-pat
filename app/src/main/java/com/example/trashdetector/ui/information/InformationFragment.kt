@@ -13,6 +13,8 @@ import com.example.trashdetector.R
 import com.example.trashdetector.base.ViewModelFactory
 import com.example.trashdetector.data.repository.HistoryRepository
 import com.example.trashdetector.data.room.AppDatabase
+import com.example.trashdetector.theme.DarkModeInterface
+import com.example.trashdetector.theme.DarkModeUtil
 import com.example.trashdetector.ui.about.AboutDialogFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -20,7 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.information_fragment.*
 import kotlinx.android.synthetic.main.trash_item.view.*
 
-class InformationFragment private constructor() : BottomSheetDialogFragment() {
+class InformationFragment private constructor() : BottomSheetDialogFragment(), DarkModeInterface {
 
     private lateinit var viewModel: InformationViewModel
 
@@ -32,7 +34,7 @@ class InformationFragment private constructor() : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
+        if (DarkModeUtil.isDarkMode) enableDarkMode() else disableDarkMode()
     }
 
     override fun onCreateView(
@@ -57,6 +59,27 @@ class InformationFragment private constructor() : BottomSheetDialogFragment() {
         initViewModel()
         setupData()
         setEvents()
+        if (DarkModeUtil.isDarkMode) setDarkItems() else setLightItems()
+    }
+
+    override fun enableDarkMode() {
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogDark)
+    }
+
+    override fun disableDarkMode() {
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
+    }
+
+    private fun setDarkItems() {
+        pages.background = context?.getDrawable(R.drawable.bg_dark)
+        iconDelete.background = context?.getDrawable(R.drawable.bg_ripple_black)
+        iconAbout.background = context?.getDrawable(R.drawable.bg_ripple_black)
+    }
+
+    private fun setLightItems() {
+        pages.background = context?.getDrawable(R.drawable.bg_light)
+        iconDelete.background = context?.getDrawable(R.drawable.bg_ripple_white)
+        iconAbout.background = context?.getDrawable(R.drawable.bg_ripple_white)
     }
 
     private fun initViewModel() {
