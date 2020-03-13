@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Trash Detector</string>
+    <string name="title_hint">Đưa vật thể rác thải cần xác định vào giữa khung hình và nhấn nút chụp hoặc chạm vào vùng xem trước</string>
+    <string name="title_ok">Đã hiểu</string>
+</resources>
