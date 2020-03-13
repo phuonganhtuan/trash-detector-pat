@@ -15,9 +15,11 @@ import android.view.LayoutInflater
 import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import com.example.trashdetector.MainActivity.Companion.PERMISSION_CAMERA_CODE
 import com.example.trashdetector.R
 import com.example.trashdetector.base.ViewModelFactory
 import com.example.trashdetector.data.model.History
@@ -27,8 +29,12 @@ import com.example.trashdetector.theme.DarkModeInterface
 import com.example.trashdetector.theme.DarkModeUtil
 import com.example.trashdetector.ui.information.InformationFragment
 import com.example.trashdetector.ui.result.ResultDialogFragment
+import com.example.trashdetector.utils.Constants.APP_PATH
+import com.example.trashdetector.utils.Constants.DARK_MODE_FILE_NAME
+import com.example.trashdetector.utils.FileUtils
 import com.example.trashdetector.utils.ImageUtils
 import kotlinx.android.synthetic.main.main_fragment.*
+import java.io.File
 
 class MainFragment : Fragment(), SurfaceListener, DarkModeInterface {
 
@@ -122,10 +128,16 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface {
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 ActivityCompat.requestPermissions(
-                    activity!!, arrayOf(Manifest.permission.CAMERA), REQUEST_CODE
+                    activity!!, arrayOf(Manifest.permission.CAMERA), PERMISSION_CAMERA_CODE
                 )
             }
-            cameraManager.openCamera(cameraId, stateCallback, null)
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                cameraManager.openCamera(cameraId, stateCallback, null)
+            }
         }
     }
 
@@ -166,6 +178,22 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface {
 
     private fun handleDarkMode() = with(DarkModeUtil) {
         isDarkMode = !isDarkMode
+        updateLocalDarkMode()
+    }
+
+    private fun updateLocalDarkMode() {
+        FileUtils.createDirectory(APP_PATH)
+        val dir = File(APP_PATH)
+        if (dir.isDirectory) {
+            val file = File(APP_PATH + DARK_MODE_FILE_NAME)
+            if (!file.exists()) {
+                file.createNewFile()
+            }
+            FileUtils.writeStringToFile(
+                APP_PATH + DARK_MODE_FILE_NAME,
+                DarkModeUtil.isDarkMode.toString()
+            )
+        }
         activity?.recreate()
     }
 
@@ -179,14 +207,16 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface {
     private fun detectTrash() {
         val cameraManager = activity?.getSystemService(Context.CAMERA_SERVICE) as CameraManager
         val characteristics = cameraManager.getCameraCharacteristics(cameraDevice.id)
-        val outputSize = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
-            ?.getOutputSizes(ImageFormat.JPEG)
+        val outputSize =
+            characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+                ?.getOutputSizes(ImageFormat.JPEG)
         val width = outputSize!![0].width
         val height = outputSize[0].height
         val imageReader = ImageReader.newInstance(width, height, ImageFormat.JPEG, 1)
         val outputSurfaces =
             mutableListOf<Surface>(imageReader.surface)
-        val captureRequest = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
+        val captureRequest =
+            cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
         captureRequest.addTarget(imageReader.surface)
         captureRequest.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
         val imageAvailableListener = ImageAvailableListener { reader ->
@@ -194,9 +224,17 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface {
             startCameraPreview(cameraDevice)
         }
         imageReader.setOnImageAvailableListener(imageAvailableListener, null)
-        cameraDevice.createCaptureSession(outputSurfaces, CaptureStateCallback { cameraSession ->
-            cameraSession.capture(captureRequest.build(), CameraCaptureListener(), cameraHandler)
-        }, cameraHandler)
+        cameraDevice.createCaptureSession(
+            outputSurfaces,
+            CaptureStateCallback { cameraSession ->
+                cameraSession.capture(
+                    captureRequest.build(),
+                    CameraCaptureListener(),
+                    cameraHandler
+                )
+            },
+            cameraHandler
+        )
     }
 
     private fun beginDetection(outputImage: Image) {
@@ -221,7 +259,6 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface {
     companion object {
 
         private const val THREAD_NAME = "Camera"
-        private const val REQUEST_CODE = 8898
         private const val RESULT_TAG = "Result"
         private const val INFORMATION_TAG = "Information"
     }
