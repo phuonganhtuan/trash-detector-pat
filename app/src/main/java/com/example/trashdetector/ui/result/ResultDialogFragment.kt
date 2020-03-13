@@ -30,7 +30,9 @@ private constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         imageOutput.setImageBitmap(image)
+        imageFullScreen.setImageBitmap(image)
         imageOutput.rotation = 90f
+        imageFullScreen.rotation = 90f
         textResult.text = type
         setEvents()
     }
@@ -43,6 +45,12 @@ private constructor(
                 "Comming soon!",
                 Toast.LENGTH_SHORT
             ).show()
+        }
+        imageOutput.setOnClickListener {
+            cardFullScreen.visibility = View.VISIBLE
+        }
+        imageFullScreen.setOnClickListener {
+            cardFullScreen.visibility = View.GONE
         }
     }
 
