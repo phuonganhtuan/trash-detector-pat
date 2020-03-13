@@ -19,4 +19,8 @@ class InformationViewModel(
     fun getHistories() = viewModelScope.launch {
         _historyList.value = repository.getHistories()
     }
+
+    fun resetHistories() = viewModelScope.launch {
+        repository.resetHistory()
+    }
 }

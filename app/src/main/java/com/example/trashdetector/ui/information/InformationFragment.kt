@@ -104,6 +104,7 @@ class InformationFragment private constructor() : BottomSheetDialogFragment() {
     private fun observeData() = with(viewModel) {
         historyList.observe(viewLifecycleOwner, Observer {
             historyAdapter.submitList(it.asReversed())
+            if (it.isEmpty()) textEmptyHistory.visibility = View.VISIBLE
         })
     }
 
@@ -120,6 +121,19 @@ class InformationFragment private constructor() : BottomSheetDialogFragment() {
         iconAbout.setOnClickListener {
             AboutDialogFragment.newInstance().show(activity!!.supportFragmentManager, ABOUT_TAG)
         }
+        iconDelete.setOnClickListener { resetHistory() }
+    }
+
+    private fun resetHistory() {
+        if (historyAdapter.currentList.isEmpty()) {
+            Toast.makeText(context, getString(R.string.title_empty_history), Toast.LENGTH_SHORT)
+                .show()
+            return
+        }
+        viewModel.resetHistories()
+        historyAdapter.submitList(emptyList())
+        textEmptyHistory.visibility = View.VISIBLE
+        Toast.makeText(context, getString(R.string.title_reset), Toast.LENGTH_SHORT).show()
     }
 
     private fun showComing() {
