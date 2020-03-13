@@ -2,7 +2,6 @@ package com.example.trashdetector
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import com.example.trashdetector.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {

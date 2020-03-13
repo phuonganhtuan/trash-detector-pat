@@ -40,5 +40,4 @@ class InformationFragment private constructor() : BottomSheetDialogFragment() {
     companion object {
         fun newInstance() = InformationFragment()
     }
-
 }
