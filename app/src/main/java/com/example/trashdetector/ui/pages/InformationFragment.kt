@@ -10,6 +10,8 @@ import com.example.trashdetector.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.android.synthetic.main.information_fragment.*
+import kotlinx.android.synthetic.main.trash_item.view.*
 
 class InformationFragment private constructor() : BottomSheetDialogFragment() {
 
@@ -35,6 +37,39 @@ class InformationFragment private constructor() : BottomSheetDialogFragment() {
                 skipCollapsed = true
             }
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupData()
+    }
+
+    private fun setupData() {
+        val title1 = getString(R.string.title_trash_1)
+        val title2 = getString(R.string.title_trash_2)
+        val title3 = getString(R.string.title_trash_3)
+        val bg1 = context!!.getDrawable(R.drawable.bg_gradient_orange)
+        val bg2 = context!!.getDrawable(R.drawable.bg_gradient_green)
+        val bg3 = context!!.getDrawable(R.drawable.bg_gradient_purple)
+
+        layoutTrash1.run {
+            textTitle.text = title1
+            layoutTrash.background = bg1
+            imageTrash.setImageResource(R.drawable.vo_co)
+        }
+
+        layoutTrash2.run {
+            textTitle.text = title2
+            layoutTrash.background = bg2
+            imageTrash.setImageResource(R.drawable.huu_co)
+        }
+
+        layoutTrash3.run {
+            textTitle.text = title3
+            layoutTrash.background = bg3
+            imageTrash.setImageResource(R.drawable.tai_che)
+        }
+
     }
 
     companion object {

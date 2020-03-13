@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
     android:background="@drawable/bg_rounded"
-    android:maxWidth="360dp">
+    android:maxWidth="400dp">
 
     <TextView
         android:id="@+id/textStatus"
@@ -14,7 +15,7 @@
         android:drawableEnd="@drawable/ic_check_circle"
         android:drawablePadding="12dp"
         android:gravity="center"
-        android:text="Kết quả nhận diện"
+        android:text="@string/title_result"
         android:textColor="@android:color/black"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -45,17 +46,22 @@
         app:layout_constraintTop_toBottomOf="@id/textStatus">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardOutput"
             style="@style/ItemShadowStyle"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="144dp"
+            android:layout_height="144dp"
             android:layout_margin="24dp"
-            app:cardCornerRadius="24dp">
+            android:translationZ="12dp"
+            app:cardCornerRadius="72dp">
 
             <ImageView
                 android:id="@+id/imageOutput"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:clickable="true"
                 android:contentDescription="@null"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
                 android:scaleType="centerCrop"
                 android:src="@mipmap/ic_launcher" />
 
@@ -83,7 +89,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:gravity="end"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -96,24 +102,46 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
             android:background="@drawable/bg_ripple_white"
             android:gravity="center"
-            android:text="Quay lại"
-            android:textColor="#999999"
-            android:textStyle="bold" />
+            android:text="@string/title_cancel"
+            android:textColor="#cccccc"
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/buttonDetail"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/bg_ripple_purple"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_ripple_white"
             android:gravity="center"
-            android:text="Chi tiết"
-            android:textColor="@android:color/white"
-            android:textStyle="bold" />
+            android:text="@string/title_detail"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp" />
 
     </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardFullScreen"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:visibility="gone"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageFullScreen"
+            android:layout_width="384dp"
+            android:layout_height="384dp"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_background" />
+
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,13 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:color="#50000000"
+    android:color="#40000000"
     tools:targetApi="lollipop">
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@android:color/white" />
-            <corners
-                android:radius="24dp"/>
+            <corners android:radius="24dp" />
+            <gradient
+                android:angle="315"
+                android:endColor="#f83600"
+                android:startColor="#f9d423" />
         </shape>
     </item>
 </ripple>

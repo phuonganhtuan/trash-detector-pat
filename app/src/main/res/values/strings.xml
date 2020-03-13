@@ -2,4 +2,11 @@
     <string name="app_name">Trash Detector</string>
     <string name="title_hint">Đưa vật thể rác thải cần xác định vào giữa khung hình và nhấn nút chụp hoặc chạm vào vùng xem trước</string>
     <string name="title_ok">Đã hiểu</string>
+    <string name="title_trash_1">Rác thải vô cơ</string>
+    <string name="title_trash_2">Rác thải hữu cơ</string>
+    <string name="title_trash_3">Rác thải tái chế</string>
+    <string name="title_information">Phân loại rác thải</string>
+    <string name="title_result">Kết quả nhận diện</string>
+    <string name="title_detail">Chi tiết</string>
+    <string name="title_cancel">Quay lại</string>
 </resources>
