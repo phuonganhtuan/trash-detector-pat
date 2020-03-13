@@ -3,7 +3,6 @@ package com.example.trashdetector.ui.main
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
@@ -20,10 +19,14 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.trashdetector.R
+import com.example.trashdetector.base.ViewModelFactory
+import com.example.trashdetector.data.model.History
+import com.example.trashdetector.data.repository.HistoryRepository
+import com.example.trashdetector.data.room.AppDatabase
 import com.example.trashdetector.ui.pages.InformationFragment
 import com.example.trashdetector.ui.result.ResultDialogFragment
+import com.example.trashdetector.utils.ImageUtils
 import kotlinx.android.synthetic.main.main_fragment.*
-import java.nio.ByteBuffer
 
 
 class MainFragment private constructor() : Fragment(), SurfaceListener {
@@ -35,6 +38,10 @@ class MainFragment private constructor() : Fragment(), SurfaceListener {
     private lateinit var handlerThread: HandlerThread
     private lateinit var captureRequest: CaptureRequest.Builder
     private lateinit var cameraDevice: CameraDevice
+
+    private val historyRepository by lazy {
+        context?.let { HistoryRepository(AppDatabase.invoke(it).historyDao()) }
+    }
 
     private val stateCallback =
         CameraStateCallback { cameraDevice -> startCameraPreview(cameraDevice) }
@@ -49,7 +56,7 @@ class MainFragment private constructor() : Fragment(), SurfaceListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        initViewModel()
         prepareCamera()
         setEvents()
     }
@@ -67,6 +74,14 @@ class MainFragment private constructor() : Fragment(), SurfaceListener {
 
     override fun onSurfaceTextureAvailable(surface: SurfaceTexture?, width: Int, height: Int) {
         openCamera()
+    }
+
+    private fun initViewModel() {
+        historyRepository?.let {
+            viewModel = ViewModelProviders.of(
+                this,
+                ViewModelFactory { MainViewModel(it) }).get(MainViewModel::class.java)
+        }
     }
 
     private fun prepareCamera() {
@@ -163,15 +178,22 @@ class MainFragment private constructor() : Fragment(), SurfaceListener {
     }
 
     private fun beginDetection(outputImage: Image) {
-        val buffer: ByteBuffer = outputImage.planes[0].buffer
-        val bytes = ByteArray(buffer.capacity())
-        buffer.get(bytes)
-        val bitmapImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.size, null)
+        val bitmapOutput = ImageUtils.getBitmap(outputImage)
         detectProgress.visibility = View.GONE
         cardCaptureEffect.visibility = View.GONE
-        ResultDialogFragment.newInstance(bitmapImage, " Rác hữu cơ")
+        ResultDialogFragment.newInstance(bitmapOutput, " Rác hữu cơ")
             .show(activity!!.supportFragmentManager, RESULT_TAG)
         buttonCapture.isEnabled = true
+        saveHistory(outputImage, "Rác hữu cơ")
+    }
+
+    private fun saveHistory(image: Image, type: String) {
+        val history = History(
+            type = type,
+            time = System.currentTimeMillis().toString(),
+            image = ImageUtils.getStringFromImage(image)
+        )
+        viewModel.insertHistory(history)
     }
 
     companion object {
