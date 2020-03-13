@@ -16,9 +16,7 @@ import android.view.LayoutInflater
 import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.trashdetector.R
@@ -185,5 +183,4 @@ class MainFragment private constructor() : Fragment(), SurfaceListener {
 
         fun newInstance() = MainFragment()
     }
-
 }

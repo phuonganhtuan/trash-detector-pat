@@ -6,5 +6,4 @@ class ImageAvailableListener(private val getOutputImage: (reader: ImageReader) -
     ImageReader.OnImageAvailableListener {
 
     override fun onImageAvailable(reader: ImageReader?) = getOutputImage(reader!!)
-
 }
