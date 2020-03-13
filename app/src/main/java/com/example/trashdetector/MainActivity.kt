@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.example.trashdetector.theme.DarkModeInterface
 import com.example.trashdetector.theme.DarkModeUtil
 import com.example.trashdetector.ui.main.MainFragment
@@ -17,10 +16,9 @@ import java.io.File
 class MainActivity : AppCompatActivity(), DarkModeInterface {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (getDarkModeStatus()) enableDarkMode() else disableDarkMode()
+        getDarkMode()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
-        requestAppPermissions()
         if (savedInstanceState == null) openDetectorPage()
     }
 
@@ -42,13 +40,19 @@ class MainActivity : AppCompatActivity(), DarkModeInterface {
             val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             requestPermissions(permissions, PERMISSION_WRITE_CODE)
         }
+
+    }
+
+    private fun getDarkMode() {
         if (ActivityCompat.checkSelfPermission(
                 this,
-                Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            == PackageManager.PERMISSION_GRANTED
         ) {
-            val permissions = arrayOf(Manifest.permission.CAMERA)
-            requestPermissions(permissions, PERMISSION_CAMERA_CODE)
+            if (getDarkModeStatus()) enableDarkMode() else disableDarkMode()
+        } else {
+            requestAppPermissions()
         }
     }
 
@@ -73,9 +77,9 @@ class MainActivity : AppCompatActivity(), DarkModeInterface {
 
     companion object {
 
+        const val PERMISSION_WRITE_CODE = 101
         const val PERMISSION_CAMERA_CODE = 110
         private const val TRUE_STRING = "true"
         private const val FALSE_STRING = "false"
-        private const val PERMISSION_WRITE_CODE = 101
     }
 }
