@@ -31,14 +31,14 @@
     // Rác hữu cơ
     <string name="des_2">Rau củ, cơm canh, cỏ cây, …</string>
     <string name="title_def_2">Rác hữu cơ là loại rác dễ phân hủy và có thể đưa vào tái chế để sử dụng cho việc chăm bón và làm thức ăn cho động vật.</string>
-    <string name="title_ex_2">- Các loại rau, củ quả đã bị hư, thối…\n- Cơm/ canh/ thức ăn còn thừa hoặc bị thiu…. Các loại bã chè, bã cafe.\n- Cỏ cây bị xén/ chặt bỏ, hoa rụng….\nMica trung quốc.</string>
-    <string name="title_from_2">- Phần bỏ đi của thực phẩm sau khi lấy đi phần chế biến được thức ăn cho con người\n- Phần thực phẩm thừa hoặc hư hỏng không thể sử dụng cho con người.\n- Các loại hoa, lá  cây, cỏ không được con người sử dụng sẽ trở thành rác thải trong môi trường.</string>
+    <string name="title_ex_2">- Các loại rau, củ quả đã bị hư, thối…\n- Cơm/ canh/ thức ăn còn thừa hoặc bị thiu…\n- Các loại bã chè, bã cafe.\n- Cỏ cây bị xén/ chặt bỏ, hoa rụng….\n- Mica trung quốc.</string>
+    <string name="title_from_2">- Phần bỏ đi của thực phẩm sau khi lấy đi phần chế biến được thức ăn cho con người.\n- Phần thực phẩm thừa hoặc hư hỏng không thể sử dụng cho con người.\n- Các loại hoa, lá  cây, cỏ không được con người sử dụng sẽ trở thành rác thải trong môi trường.</string>
     <string name="title_do_2">Thu gom riêng vào vật dụng chứa rác để tận dụng làm phân compost.</string>
 
     // Rác tái chế
-    <string name="des_3">Gạch đá, ly cốc, băng đĩa hỏng, …</string>
+    <string name="des_3">Giấy bìa, vải, nhựa, …</string>
     <string name="title_def_3">Rác tái chế là loại rác khó phân hủy nhưng có thể tái chế lại thành sản phẩm mới cùng loại hoặc có thể tái chế thành một sản phẩm khác để sử dụng nhằm mục đích phục vụ cho con người.</string>
-    <string name="title_ex_3">- Thùng carton, sách báo cũ.\n- Hộp giấy, bì thư, bưu thiếp đã qua sử dụng.\n- Các loại vỏ lon nước ngọt/ lon bia/ vỏ hộp trà….\n- Các loại ghế nhựa, thau/ chậu nhựa, quần áo và vải cũ…</string>
+    <string name="title_ex_3">- Thùng carton, sách báo cũ.\n- Hộp giấy, bì thư, bưu thiếp đã qua sử dụng.\n- Các loại vỏ lon nước ngọt/ lon bia/ vỏ hộp trà…\n- Các loại ghế nhựa, thau/ chậu nhựa, quần áo và vải cũ…</string>
     <string name="title_from_3">- Các loại giấy thải.\n- Các loại hộp/ chai/ vỏ lon thực phẩm bỏ đi.</string>
-    <string name="title_do_3">Cần được tách riêng, đựng trong túi ny-lon hoặc túi vải để bán lại cho cơ sở tái chế</string>
+    <string name="title_do_3">Cần được tách riêng, đựng trong túi ny-lon hoặc túi vải để bán lại cho cơ sở tái chế.</string>
 </resources>
