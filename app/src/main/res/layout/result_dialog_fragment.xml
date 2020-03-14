@@ -57,8 +57,7 @@
                 android:contentDescription="@null"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher" />
+                android:scaleType="centerCrop" />
 
             <ImageView
                 android:layout_width="36dp"
@@ -80,7 +79,6 @@
             android:paddingTop="8dp"
             android:paddingEnd="16dp"
             android:paddingBottom="8dp"
-            android:text="@string/title_trash_1"
             android:textColor="@android:color/white"
             android:textSize="16dp"
             android:textStyle="bold"
@@ -166,8 +164,7 @@
             android:contentDescription="@null"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_background" />
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/textResultFull"
@@ -181,7 +178,6 @@
             android:paddingTop="8dp"
             android:paddingEnd="16dp"
             android:paddingBottom="8dp"
-            android:text="@string/title_trash_1"
             android:textColor="@color/colorPrimary"
             android:textSize="16dp"
             android:textStyle="bold"

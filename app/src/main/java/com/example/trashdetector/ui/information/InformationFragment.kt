@@ -36,9 +36,6 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
     private lateinit var closeCameraHandler: Handler
     private lateinit var fetchDataHandler: Handler
 
-    private lateinit var closeCameraRunnable: Runnable
-    private lateinit var fetchDataRunnable: Runnable
-
     private val historyRepository by lazy {
         context?.let { HistoryRepository(AppDatabase.invoke(it).historyDao()) }
     }
@@ -133,24 +130,30 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
         val title1 = getString(R.string.title_trash_1)
         val title2 = getString(R.string.title_trash_2)
         val title3 = getString(R.string.title_trash_3)
-        val bg1 = context!!.getDrawable(R.drawable.bg_gradient_orange)
-        val bg2 = context!!.getDrawable(R.drawable.bg_gradient_green)
-        val bg3 = context!!.getDrawable(R.drawable.bg_gradient_purple)
+        val description1 = getString(R.string.des_1)
+        val description2 = getString(R.string.des_2)
+        val description3 = getString(R.string.des_3)
+        val bg1 = context?.getDrawable(R.drawable.bg_gradient_orange)
+        val bg2 = context?.getDrawable(R.drawable.bg_gradient_green)
+        val bg3 = context?.getDrawable(R.drawable.bg_gradient_purple)
 
         layoutTrash1.run {
             textTitle.text = title1
+            textDescription.text = description1
             layoutTrash.background = bg1
             imageTrash.setImageResource(R.drawable.vo_co)
         }
 
         layoutTrash2.run {
             textTitle.text = title2
+            textDescription.text = description2
             layoutTrash.background = bg2
             imageTrash.setImageResource(R.drawable.huu_co)
         }
 
         layoutTrash3.run {
             textTitle.text = title3
+            textDescription.text = description3
             layoutTrash.background = bg3
             imageTrash.setImageResource(R.drawable.tai_che)
         }
@@ -162,7 +165,7 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
     }
 
     private fun observeData() = with(viewModel) {
-        historyList.observe(this@InformationFragment, Observer {
+        historyList.observe(viewLifecycleOwner, Observer {
             historyAdapter.submitList(it.asReversed())
             if (it.isEmpty()) textEmptyHistory.visibility = View.VISIBLE
         })
