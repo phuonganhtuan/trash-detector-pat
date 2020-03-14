@@ -40,17 +40,20 @@ private constructor(
         imageOutput.rotation = 90f
         imageFullScreen.rotation = 90f
         textResult.text = type
+        textResultFull.text = type
         setEvents()
     }
 
     override fun enableDarkMode() {
         layoutRootResult.background = context?.getDrawable(R.drawable.bg_rounded_black)
+        textResultFull.background = context?.getDrawable(R.drawable.bg_rounded_black)
         buttonDetail.background = context?.getDrawable(R.drawable.bg_ripple_black)
         buttonCancel.background = context?.getDrawable(R.drawable.bg_ripple_black)
     }
 
     override fun disableDarkMode() {
         layoutRootResult.background = context?.getDrawable(R.drawable.bg_rounded)
+        textResultFull.background = context?.getDrawable(R.drawable.bg_rounded)
         buttonDetail.background = context?.getDrawable(R.drawable.bg_ripple_white)
         buttonCancel.background = context?.getDrawable(R.drawable.bg_ripple_white)
     }
