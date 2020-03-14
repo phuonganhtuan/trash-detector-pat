@@ -27,11 +27,6 @@ class DetailDialogFragment(private val type: Int, private var image: Bitmap?) : 
         super.onViewCreated(view, savedInstanceState)
         displayDetail()
         setEvents()
-        displayCancelButton()
-    }
-
-    private fun displayCancelButton() {
-        Handler().postDelayed({ cardCancel.visibility = View.VISIBLE }, 1000)
     }
 
     private fun displayDetail() = when (type) {
