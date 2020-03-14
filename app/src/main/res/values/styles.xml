@@ -24,7 +24,7 @@
         <item name="android:elevation">12dp</item>
     </style>
 
-    <style name="DialogStyle" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+    <style name="DialogStyle" parent="AppTheme">
         <item name="android:windowIsFloating">false</item>
         <item name="android:statusBarColor">@android:color/white</item>
         <item name="android:windowLightStatusBar">true</item>

@@ -1,6 +1,7 @@
 package com.example.trashdetector.ui.main
 
-interface OnDialogCancelListener {
+interface OnDialogActionsListener {
 
     fun onDialogCanceled()
+    fun onDelayCreated() {}
 }

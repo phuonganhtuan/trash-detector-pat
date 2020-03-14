@@ -2,6 +2,7 @@ package com.example.trashdetector.ui.information
 
 import android.app.Dialog
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +17,8 @@ import com.example.trashdetector.data.room.AppDatabase
 import com.example.trashdetector.theme.DarkModeInterface
 import com.example.trashdetector.theme.DarkModeUtil
 import com.example.trashdetector.ui.about.AboutDialogFragment
-import com.example.trashdetector.ui.main.OnDialogCancelListener
+import com.example.trashdetector.ui.detail.DetailDialogFragment
+import com.example.trashdetector.ui.main.OnDialogActionsListener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -29,7 +31,13 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
 
     private val historyAdapter by lazy { HistoryAdapter() }
 
-    private var onDialogCancelListener: OnDialogCancelListener? = null
+    private var onDialogActionsListener: OnDialogActionsListener? = null
+
+    private lateinit var closeCameraHandler: Handler
+    private lateinit var fetchDataHandler: Handler
+
+    private lateinit var closeCameraRunnable: Runnable
+    private lateinit var fetchDataRunnable: Runnable
 
     private val historyRepository by lazy {
         context?.let { HistoryRepository(AppDatabase.invoke(it).historyDao()) }
@@ -63,6 +71,23 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
         setupData()
         setEvents()
         if (DarkModeUtil.isDarkMode) setDarkItems() else setLightItems()
+        pauseCamera()
+        displayHistory()
+    }
+
+    private fun displayHistory() {
+        fetchDataHandler = Handler()
+        fetchDataHandler.postDelayed({
+            viewModel.getHistories()
+            observeData()
+        }, 1000)
+    }
+
+    private fun pauseCamera() {
+        closeCameraHandler = Handler()
+        closeCameraHandler.postDelayed({
+            onDialogActionsListener?.onDelayCreated()
+        }, 3000)
     }
 
     override fun enableDarkMode() {
@@ -74,7 +99,9 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
     }
 
     override fun onDestroy() {
-        onDialogCancelListener?.onDialogCanceled()
+        onDialogActionsListener?.onDialogCanceled()
+        closeCameraHandler.removeCallbacksAndMessages(null)
+        fetchDataHandler.removeCallbacksAndMessages(null)
         super.onDestroy()
     }
 
@@ -84,8 +111,8 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
         iconAbout.background = context?.getDrawable(R.drawable.bg_ripple_black)
     }
 
-    fun setOnDialogCancelListener(onDialogCancelListener: OnDialogCancelListener) {
-        this.onDialogCancelListener = onDialogCancelListener
+    fun setOnDialogCancelListener(onDialogActionsListener: OnDialogActionsListener) {
+        this.onDialogActionsListener = onDialogActionsListener
     }
 
     private fun setLightItems() {
@@ -128,8 +155,6 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
             imageTrash.setImageResource(R.drawable.tai_che)
         }
         setupHistoryList()
-        viewModel.getHistories()
-        observeData()
     }
 
     private fun setupHistoryList() {
@@ -137,7 +162,7 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
     }
 
     private fun observeData() = with(viewModel) {
-        historyList.observe(viewLifecycleOwner, Observer {
+        historyList.observe(this@InformationFragment, Observer {
             historyAdapter.submitList(it.asReversed())
             if (it.isEmpty()) textEmptyHistory.visibility = View.VISIBLE
         })
@@ -145,13 +170,13 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
 
     private fun setEvents() {
         cardTrash1.setOnClickListener {
-            showComing()
+            DetailDialogFragment(1, null).show(activity!!.supportFragmentManager, DETAIL_TAG)
         }
         cardTrash2.setOnClickListener {
-            showComing()
+            DetailDialogFragment(2, null).show(activity!!.supportFragmentManager, DETAIL_TAG)
         }
         cardTrash3.setOnClickListener {
-            showComing()
+            DetailDialogFragment(3, null).show(activity!!.supportFragmentManager, DETAIL_TAG)
         }
         iconAbout.setOnClickListener {
             AboutDialogFragment.newInstance().show(activity!!.supportFragmentManager, ABOUT_TAG)
@@ -171,13 +196,10 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
         Toast.makeText(context, getString(R.string.title_reset), Toast.LENGTH_SHORT).show()
     }
 
-    private fun showComing() {
-        Toast.makeText(context, "Comming soon!", Toast.LENGTH_SHORT).show()
-    }
-
     companion object {
 
         private const val ABOUT_TAG = "About"
+        private const val DETAIL_TAG = "Detail"
 
         fun newInstance() = InformationFragment()
     }

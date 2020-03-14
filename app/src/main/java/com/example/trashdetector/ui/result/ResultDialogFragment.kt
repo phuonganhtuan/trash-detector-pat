@@ -7,12 +7,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.example.trashdetector.R
 import com.example.trashdetector.theme.DarkModeInterface
 import com.example.trashdetector.theme.DarkModeUtil
-import com.example.trashdetector.ui.main.OnDialogCancelListener
+import com.example.trashdetector.ui.detail.DetailDialogFragment
+import com.example.trashdetector.ui.main.OnDialogActionsListener
 import kotlinx.android.synthetic.main.result_dialog_fragment.*
 
 class ResultDialogFragment
@@ -21,7 +21,7 @@ private constructor(
     private val type: String
 ) : DialogFragment(), DarkModeInterface {
 
-    private var onDialogCancelListener: OnDialogCancelListener? = null
+    private var onDialogActionsListener: OnDialogActionsListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,18 +58,19 @@ private constructor(
         buttonCancel.background = context?.getDrawable(R.drawable.bg_ripple_white)
     }
 
-    fun setOnDialogCancelListener(onDialogCancelListener: OnDialogCancelListener) {
-        this.onDialogCancelListener = onDialogCancelListener
+    override fun onDestroy() {
+        onDialogActionsListener?.onDialogCanceled()
+        super.onDestroy()
+    }
+
+    fun setOnDialogCancelListener(onDialogActionsListener: OnDialogActionsListener) {
+        this.onDialogActionsListener = onDialogActionsListener
     }
 
     private fun setEvents() {
         buttonCancel.setOnClickListener { dialog?.cancel() }
         buttonDetail.setOnClickListener {
-            Toast.makeText(
-                context,
-                "Comming soon!",
-                Toast.LENGTH_SHORT
-            ).show()
+            openDetail()
         }
         imageOutput.setOnClickListener {
             cardFullScreen.visibility = View.VISIBLE
@@ -79,12 +80,33 @@ private constructor(
         }
     }
 
-    override fun onDestroy() {
-        onDialogCancelListener?.onDialogCanceled()
-        super.onDestroy()
+    private fun openDetail() {
+        val type1 = getString(R.string.title_trash_1)
+        val type2 = getString(R.string.title_trash_2)
+        val type3 = getString(R.string.title_trash_3)
+        when (type) {
+            type1 -> DetailDialogFragment(1, image).show(
+                activity!!.supportFragmentManager,
+                DETAIL_TAG
+            )
+            type2 -> DetailDialogFragment(2, image).show(
+                activity!!.supportFragmentManager,
+                DETAIL_TAG
+            )
+            type3 -> DetailDialogFragment(3, image).show(
+                activity!!.supportFragmentManager,
+                DETAIL_TAG
+            )
+            else -> DetailDialogFragment(1, image).show(
+                activity!!.supportFragmentManager,
+                DETAIL_TAG
+            )
+        }
     }
 
     companion object {
+
+        private const val DETAIL_TAG = "Detail"
 
         fun newInstance(image: Bitmap, type: String) = ResultDialogFragment(image, type)
     }

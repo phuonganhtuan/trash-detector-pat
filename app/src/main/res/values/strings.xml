@@ -16,4 +16,29 @@
     <string name="title_history">Lịch sử nhận diện</string>
     <string name="title_reset">Đã xóa lịch sử nhận diện</string>
     <string name="title_empty_history">Chưa có dữ liệu</string>
+    <string name="title_def">Khái niệm</string>
+    <string name="title_from">Nguồn gốc</string>
+    <string name="title_example">Ví dụ</string>
+    <string name="title_do">Cách xử lý</string>
+
+    // Rác vô cơ
+    <string name="des_1">Gạch đá, ly cốc, băng đĩa hỏng, …</string>
+    <string name="title_def_1">Rác vô cơ là những loại rác không thể sử dụng được nữa, cũng không thể tái chế hoặc tốn quá nhiều chi phí để tái chế nên chỉ có thể xử lý bằng cách mang ra các khu chôn lấp rác thải.</string>
+    <string name="title_ex_1">- Gạch/ đá, đồ sành/ sứ vỡ hoặc không còn giá trị sử dụng.\n- Ly/ cốc/ bình thủy tinh vỡ…\n- Các loại vỏ sò/ ốc, vỏ trứng…\n- Đồ da, đồ cao su, đồng hồ hỏng, băng đĩa nhạc, radio… không thể sử dụng.</string>
+    <string name="title_from_1">- Các loại vật liệu xây dựng không thẻ sử dụng hoặc đã qua sử dụng và được bỏ đi.\n- Các loại bao bì bọc bên ngoài hộp/ chai thực phẩm.\n- Các loại túi nilong được bỏ đi sau khi con người dùng đựng thực phẩm.\n- Một số loại vật dụng/ thiết bị trong đời sống hàng ngày của con người.</string>
+    <string name="title_do_1">Thu gom vào dụng cụ chứa rác và đưa đến điểm tập kết để xe chuyên dụng đến vận chuyển, đưa đi xử lý tại các khu xử lý rác thải tập trung theo quy định.</string>
+
+    // Rác hữu cơ
+    <string name="des_2">Rau củ, cơm canh, cỏ cây, …</string>
+    <string name="title_def_2">Rác hữu cơ là loại rác dễ phân hủy và có thể đưa vào tái chế để sử dụng cho việc chăm bón và làm thức ăn cho động vật.</string>
+    <string name="title_ex_2">- Các loại rau, củ quả đã bị hư, thối…\n- Cơm/ canh/ thức ăn còn thừa hoặc bị thiu…. Các loại bã chè, bã cafe.\n- Cỏ cây bị xén/ chặt bỏ, hoa rụng….\nMica trung quốc.</string>
+    <string name="title_from_2">- Phần bỏ đi của thực phẩm sau khi lấy đi phần chế biến được thức ăn cho con người\n- Phần thực phẩm thừa hoặc hư hỏng không thể sử dụng cho con người.\n- Các loại hoa, lá  cây, cỏ không được con người sử dụng sẽ trở thành rác thải trong môi trường.</string>
+    <string name="title_do_2">Thu gom riêng vào vật dụng chứa rác để tận dụng làm phân compost.</string>
+
+    // Rác tái chế
+    <string name="des_3">Gạch đá, ly cốc, băng đĩa hỏng, …</string>
+    <string name="title_def_3">Rác tái chế là loại rác khó phân hủy nhưng có thể tái chế lại thành sản phẩm mới cùng loại hoặc có thể tái chế thành một sản phẩm khác để sử dụng nhằm mục đích phục vụ cho con người.</string>
+    <string name="title_ex_3">- Thùng carton, sách báo cũ.\n- Hộp giấy, bì thư, bưu thiếp đã qua sử dụng.\n- Các loại vỏ lon nước ngọt/ lon bia/ vỏ hộp trà….\n- Các loại ghế nhựa, thau/ chậu nhựa, quần áo và vải cũ…</string>
+    <string name="title_from_3">- Các loại giấy thải.\n- Các loại hộp/ chai/ vỏ lon thực phẩm bỏ đi.</string>
+    <string name="title_do_3">Cần được tách riêng, đựng trong túi ny-lon hoặc túi vải để bán lại cho cơ sở tái chế</string>
 </resources>

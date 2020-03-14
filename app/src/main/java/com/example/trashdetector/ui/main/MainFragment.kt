@@ -37,7 +37,7 @@ import com.example.trashdetector.utils.ImageUtils
 import kotlinx.android.synthetic.main.main_fragment.*
 import java.io.File
 
-class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogCancelListener {
+class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogActionsListener {
 
     private lateinit var viewModel: MainViewModel
 
@@ -109,6 +109,13 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogCan
         iconInformation.isEnabled = true
         iconDarkMode.isEnabled = true
         buttonCapture.isEnabled = true
+    }
+
+    override fun onDelayCreated() {
+        cameraCaptureSession.close()
+        iconInformation.isEnabled = false
+        iconDarkMode.isEnabled = false
+        buttonCapture.isEnabled = false
     }
 
     private fun initViewModel() {
@@ -189,10 +196,6 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogCan
     private fun openInformationPage() {
         InformationFragment.newInstance().apply { setOnDialogCancelListener(this@MainFragment) }
             .show(activity!!.supportFragmentManager, INFORMATION_TAG)
-        cameraCaptureSession.close()
-        iconInformation.isEnabled = false
-        iconDarkMode.isEnabled = false
-        buttonCapture.isEnabled = false
     }
 
     private fun handleDarkMode() = with(DarkModeUtil) {
@@ -289,11 +292,11 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogCan
         val bitmapOutput = ImageUtils.getBitmap(outputImage)
         detectProgress.visibility = View.GONE
         cardCaptureEffect.visibility = View.GONE
-        ResultDialogFragment.newInstance(bitmapOutput, " Rác hữu cơ").apply {
+        ResultDialogFragment.newInstance(bitmapOutput, "Rác thải tái chế").apply {
             setOnDialogCancelListener(this@MainFragment)
         }.show(activity!!.supportFragmentManager, RESULT_TAG)
         buttonCapture.isEnabled = true
-        saveHistory(outputImage, "Rác hữu cơ")
+        saveHistory(outputImage, "Rác thải tái chế")
     }
 
     private fun saveHistory(image: Image, type: String) {
