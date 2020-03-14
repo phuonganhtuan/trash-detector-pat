@@ -16,6 +16,7 @@ import com.example.trashdetector.data.room.AppDatabase
 import com.example.trashdetector.theme.DarkModeInterface
 import com.example.trashdetector.theme.DarkModeUtil
 import com.example.trashdetector.ui.about.AboutDialogFragment
+import com.example.trashdetector.ui.main.OnDialogCancelListener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -27,6 +28,8 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
     private lateinit var viewModel: InformationViewModel
 
     private val historyAdapter by lazy { HistoryAdapter() }
+
+    private var onDialogCancelListener: OnDialogCancelListener? = null
 
     private val historyRepository by lazy {
         context?.let { HistoryRepository(AppDatabase.invoke(it).historyDao()) }
@@ -70,10 +73,19 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
     }
 
+    override fun onDestroy() {
+        onDialogCancelListener?.onDialogCanceled()
+        super.onDestroy()
+    }
+
     private fun setDarkItems() {
         pages.background = context?.getDrawable(R.drawable.bg_dark)
         iconDelete.background = context?.getDrawable(R.drawable.bg_ripple_black)
         iconAbout.background = context?.getDrawable(R.drawable.bg_ripple_black)
+    }
+
+    fun setOnDialogCancelListener(onDialogCancelListener: OnDialogCancelListener) {
+        this.onDialogCancelListener = onDialogCancelListener
     }
 
     private fun setLightItems() {

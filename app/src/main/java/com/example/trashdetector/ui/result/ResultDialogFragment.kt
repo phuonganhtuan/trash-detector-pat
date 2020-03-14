@@ -12,6 +12,7 @@ import androidx.fragment.app.DialogFragment
 import com.example.trashdetector.R
 import com.example.trashdetector.theme.DarkModeInterface
 import com.example.trashdetector.theme.DarkModeUtil
+import com.example.trashdetector.ui.main.OnDialogCancelListener
 import kotlinx.android.synthetic.main.result_dialog_fragment.*
 
 class ResultDialogFragment
@@ -19,6 +20,8 @@ private constructor(
     private val image: Bitmap,
     private val type: String
 ) : DialogFragment(), DarkModeInterface {
+
+    private var onDialogCancelListener: OnDialogCancelListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,6 +55,10 @@ private constructor(
         buttonCancel.background = context?.getDrawable(R.drawable.bg_ripple_white)
     }
 
+    fun setOnDialogCancelListener(onDialogCancelListener: OnDialogCancelListener) {
+        this.onDialogCancelListener = onDialogCancelListener
+    }
+
     private fun setEvents() {
         buttonCancel.setOnClickListener { dialog?.cancel() }
         buttonDetail.setOnClickListener {
@@ -67,6 +74,11 @@ private constructor(
         imageFullScreen.setOnClickListener {
             cardFullScreen.visibility = View.GONE
         }
+    }
+
+    override fun onDestroy() {
+        onDialogCancelListener?.onDialogCanceled()
+        super.onDestroy()
     }
 
     companion object {

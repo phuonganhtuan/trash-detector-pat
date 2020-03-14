@@ -1,19 +1,18 @@
 package com.example.trashdetector.ui.main
 
-import android.Manifest
 import android.Manifest.permission.CAMERA
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
-import android.hardware.Camera
 import android.hardware.camera2.*
 import android.media.Image
 import android.media.ImageReader
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Surface
 import android.view.View
@@ -39,7 +38,7 @@ import com.example.trashdetector.utils.ImageUtils
 import kotlinx.android.synthetic.main.main_fragment.*
 import java.io.File
 
-class MainFragment : Fragment(), SurfaceListener, DarkModeInterface {
+class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogCancelListener {
 
     private lateinit var viewModel: MainViewModel
 
@@ -48,6 +47,7 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface {
     private lateinit var handlerThread: HandlerThread
     private lateinit var captureRequest: CaptureRequest.Builder
     private lateinit var cameraDevice: CameraDevice
+    private lateinit var cameraCaptureSession: CameraCaptureSession
 
     private val historyRepository by lazy {
         context?.let { HistoryRepository(AppDatabase.invoke(it).historyDao()) }
@@ -105,6 +105,11 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface {
         iconDarkMode.setImageResource(R.drawable.ic_dark_mode)
     }
 
+    override fun onDialogCanceled() {
+        startCameraPreview(cameraDevice)
+        Log.i("dialoff", "aaa")
+    }
+
     private fun initViewModel() {
         historyRepository?.let {
             viewModel = ViewModelProviders.of(
@@ -127,16 +132,16 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface {
         context?.let { context ->
             if (ActivityCompat.checkSelfPermission(
                     context,
-                    Manifest.permission.CAMERA
+                    CAMERA
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 ActivityCompat.requestPermissions(
-                    activity!!, arrayOf(Manifest.permission.CAMERA), PERMISSION_CAMERA_CODE
+                    activity!!, arrayOf(CAMERA), PERMISSION_CAMERA_CODE
                 )
             }
             if (ActivityCompat.checkSelfPermission(
                     context,
-                    Manifest.permission.CAMERA
+                    CAMERA
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
                 cameraManager.openCamera(cameraId, stateCallback, null)
@@ -156,6 +161,7 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface {
     private fun updatePreview(session: CameraCaptureSession) {
         captureRequest.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
         session.setRepeatingRequest(captureRequest.build(), null, cameraHandler)
+        cameraCaptureSession = session
     }
 
     private fun startCameraThread() {
@@ -170,13 +176,16 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface {
     }
 
     private fun setEvents() {
-        iconInformation.setOnClickListener {
-            InformationFragment.newInstance()
-                .show(activity!!.supportFragmentManager, INFORMATION_TAG)
-        }
+        iconInformation.setOnClickListener { openInformationPage() }
         buttonCapture.setOnClickListener { onCaptureClick() }
         cardViewCamera.setOnClickListener { onCaptureClick() }
         iconDarkMode.setOnClickListener { handleDarkMode() }
+    }
+
+    private fun openInformationPage() {
+        InformationFragment.newInstance().apply { setOnDialogCancelListener(this@MainFragment) }
+            .show(activity!!.supportFragmentManager, INFORMATION_TAG)
+        cameraCaptureSession.close()
     }
 
     private fun handleDarkMode() = with(DarkModeUtil) {
@@ -254,7 +263,6 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface {
         captureRequest.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
         val imageAvailableListener = ImageAvailableListener { reader ->
             beginDetection(reader.acquireLatestImage())
-            startCameraPreview(cameraDevice)
         }
         imageReader.setOnImageAvailableListener(imageAvailableListener, null)
         cameraDevice.createCaptureSession(
@@ -274,8 +282,9 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface {
         val bitmapOutput = ImageUtils.getBitmap(outputImage)
         detectProgress.visibility = View.GONE
         cardCaptureEffect.visibility = View.GONE
-        ResultDialogFragment.newInstance(bitmapOutput, " Rác hữu cơ")
-            .show(activity!!.supportFragmentManager, RESULT_TAG)
+        ResultDialogFragment.newInstance(bitmapOutput, " Rác hữu cơ").apply {
+            setOnDialogCancelListener(this@MainFragment)
+        }.show(activity!!.supportFragmentManager, RESULT_TAG)
         buttonCapture.isEnabled = true
         saveHistory(outputImage, "Rác hữu cơ")
     }
