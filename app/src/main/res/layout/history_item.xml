@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
@@ -43,8 +44,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/title_trash_1"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textSize="14dp"
+            android:textStyle="bold"
+            tools:ignore="SpUsage" />
 
         <TextView
             android:id="@+id/textTimeStamp"
@@ -52,7 +54,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="12/03/2020 14:00"
-            android:textColor="#999999" />
+            android:textColor="#999999"
+            android:textSize="11dp"
+            tools:ignore="SpUsage" />
 
     </LinearLayout>
 </LinearLayout>

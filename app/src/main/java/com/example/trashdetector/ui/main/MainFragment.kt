@@ -12,7 +12,6 @@ import android.media.ImageReader
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Surface
 import android.view.View
@@ -107,7 +106,9 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogCan
 
     override fun onDialogCanceled() {
         startCameraPreview(cameraDevice)
-        Log.i("dialoff", "aaa")
+        iconInformation.isEnabled = true
+        iconDarkMode.isEnabled = true
+        buttonCapture.isEnabled = true
     }
 
     private fun initViewModel() {
@@ -179,13 +180,19 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogCan
         iconInformation.setOnClickListener { openInformationPage() }
         buttonCapture.setOnClickListener { onCaptureClick() }
         cardViewCamera.setOnClickListener { onCaptureClick() }
-        iconDarkMode.setOnClickListener { handleDarkMode() }
+        iconDarkMode.setOnClickListener {
+            iconDarkMode.isEnabled = false
+            handleDarkMode()
+        }
     }
 
     private fun openInformationPage() {
         InformationFragment.newInstance().apply { setOnDialogCancelListener(this@MainFragment) }
             .show(activity!!.supportFragmentManager, INFORMATION_TAG)
         cameraCaptureSession.close()
+        iconInformation.isEnabled = false
+        iconDarkMode.isEnabled = false
+        buttonCapture.isEnabled = false
     }
 
     private fun handleDarkMode() = with(DarkModeUtil) {

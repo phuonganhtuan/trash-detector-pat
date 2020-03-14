@@ -59,12 +59,13 @@
             android:layout_margin="32dp"
             android:gravity="center"
             android:text="@string/title_hint"
-            android:textSize="18sp"
+            android:textSize="16dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpUsage" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
