@@ -4,6 +4,7 @@ import android.Manifest.permission.CAMERA
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
@@ -29,11 +30,13 @@ import com.example.trashdetector.data.room.AppDatabase
 import com.example.trashdetector.theme.DarkModeInterface
 import com.example.trashdetector.theme.DarkModeUtil
 import com.example.trashdetector.ui.information.InformationFragment
+import com.example.trashdetector.ui.result.CurrentDetection
 import com.example.trashdetector.ui.result.ResultDialogFragment
 import com.example.trashdetector.utils.Constants.APP_PATH
 import com.example.trashdetector.utils.Constants.DARK_MODE_FILE_NAME
 import com.example.trashdetector.utils.FileUtils
 import com.example.trashdetector.utils.ImageUtils
+import com.example.trashdetector.utils.ToastUtils
 import kotlinx.android.synthetic.main.main_fragment.*
 import java.io.File
 
@@ -91,6 +94,7 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogAct
             layoutTitle.background = it.getDrawable(R.drawable.bg_dark)
             layoutBottom.background = it.getDrawable(R.drawable.bg_dark)
             iconDarkMode.background = it.getDrawable(R.drawable.bg_ripple_black)
+            iconRecent.background = it.getDrawable(R.drawable.bg_ripple_black)
         }
         iconDarkMode.setImageResource(R.drawable.ic_light_mode)
     }
@@ -100,22 +104,19 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogAct
             layoutTitle.background = it.getDrawable(R.drawable.bg_light)
             layoutBottom.background = it.getDrawable(R.drawable.bg_light)
             iconDarkMode.background = it.getDrawable(R.drawable.bg_ripple_white)
+            iconRecent.background = it.getDrawable(R.drawable.bg_ripple_white)
         }
         iconDarkMode.setImageResource(R.drawable.ic_dark_mode)
     }
 
     override fun onDialogCanceled() {
         startCameraPreview(cameraDevice)
-        iconInformation.isEnabled = true
-        iconDarkMode.isEnabled = true
-        buttonCapture.isEnabled = true
+        enableButtons()
     }
 
     override fun onDelayCreated() {
         cameraCaptureSession.close()
-        iconInformation.isEnabled = false
-        iconDarkMode.isEnabled = false
-        buttonCapture.isEnabled = false
+        disableButtons()
     }
 
     private fun initViewModel() {
@@ -184,18 +185,60 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogAct
     }
 
     private fun setEvents() {
-        iconInformation.setOnClickListener { openInformationPage() }
-        buttonCapture.setOnClickListener { onCaptureClick() }
-        cardViewCamera.setOnClickListener { onCaptureClick() }
+        iconInformation.setOnClickListener {
+            disableButtons()
+            openInformationPage()
+        }
+        buttonCapture.setOnClickListener {
+            disableButtons()
+            onCaptureClick()
+        }
+        cardViewCamera.setOnClickListener {
+            disableButtons()
+            onCaptureClick()
+        }
         iconDarkMode.setOnClickListener {
-            iconDarkMode.isEnabled = false
+            disableButtons()
             handleDarkMode()
         }
+        iconRecent.setOnClickListener { showRecent() }
+    }
+
+    private fun showRecent() {
+        CurrentDetection.run {
+            if (isNoRecent) {
+                ToastUtils.showMessage(context, getString(R.string.title_no_recent))
+            } else {
+                disableButtons()
+                showResult(detection.image, detection.type, detection.percent, detection.time)
+                cameraCaptureSession.close()
+            }
+        }
+    }
+
+    private fun showResult(image: Bitmap, type: String, percent: Int, time: Long) {
+        ResultDialogFragment.newInstance(image, type, percent, time).apply {
+            setOnDialogCancelListener(this@MainFragment)
+        }.show(activity!!.supportFragmentManager, RESULT_TAG)
     }
 
     private fun openInformationPage() {
         InformationFragment.newInstance().apply { setOnDialogCancelListener(this@MainFragment) }
             .show(activity!!.supportFragmentManager, INFORMATION_TAG)
+    }
+
+    private fun enableButtons() {
+        iconRecent.isEnabled = true
+        buttonCapture.isEnabled = true
+        iconInformation.isEnabled = true
+        iconDarkMode.isEnabled = true
+    }
+
+    private fun disableButtons() {
+        iconRecent.isEnabled = false
+        buttonCapture.isEnabled = false
+        iconInformation.isEnabled = false
+        iconDarkMode.isEnabled = false
     }
 
     private fun handleDarkMode() = with(DarkModeUtil) {
@@ -249,7 +292,6 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogAct
                 CAMERA
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            buttonCapture.isEnabled = false
             cardCaptureEffect.visibility = View.VISIBLE
             detectProgress.visibility = View.VISIBLE
             detectTrash()
@@ -290,22 +332,29 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogAct
 
     private fun beginDetection(outputImage: Image) {
         val bitmapOutput = ImageUtils.getBitmap(outputImage)
+        val type = "Rác thải tái chế"
+        val percent = 95
+        val time = System.currentTimeMillis()
         detectProgress.visibility = View.GONE
         cardCaptureEffect.visibility = View.GONE
-        ResultDialogFragment.newInstance(bitmapOutput, "Rác thải tái chế").apply {
-            setOnDialogCancelListener(this@MainFragment)
-        }.show(activity!!.supportFragmentManager, RESULT_TAG)
-        buttonCapture.isEnabled = true
-        saveHistory(outputImage, "Rác thải tái chế")
+        showResult(
+            bitmapOutput,
+            type,
+            percent,
+            time
+        )
+        saveHistory(outputImage, type, percent, time)
     }
 
-    private fun saveHistory(image: Image, type: String) {
+    private fun saveHistory(image: Image, type: String, percent: Int, time: Long) {
         val history = History(
             type = type,
-            time = System.currentTimeMillis().toString(),
+            time = time.toString(),
             image = ImageUtils.getStringFromBitmap(ImageUtils.getBitmap(image))
         )
         viewModel.insertHistory(history)
+        CurrentDetection.createCurrentDetection(ImageUtils.getBitmap(image), type, percent)
+        if (!CurrentDetection.isNoRecent) iconRecent.visibility = View.VISIBLE
     }
 
     companion object {

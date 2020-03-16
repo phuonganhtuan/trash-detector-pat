@@ -13,12 +13,15 @@ import com.example.trashdetector.theme.DarkModeInterface
 import com.example.trashdetector.theme.DarkModeUtil
 import com.example.trashdetector.ui.detail.DetailDialogFragment
 import com.example.trashdetector.ui.main.OnDialogActionsListener
+import com.example.trashdetector.utils.TimeUtils
 import kotlinx.android.synthetic.main.result_dialog_fragment.*
 
 class ResultDialogFragment
 private constructor(
     private val image: Bitmap,
-    private val type: String
+    private val type: String,
+    private val percent: Int,
+    private val time: Long
 ) : DialogFragment(), DarkModeInterface {
 
     private var onDialogActionsListener: OnDialogActionsListener? = null
@@ -41,14 +44,17 @@ private constructor(
         imageFullScreen.rotation = 90f
         textResult.text = type
         textResultFull.text = type
+        textPercent.text =
+            String.format(getString(R.string.title_percent), percent.toString(), PERCENT_CHAR)
+        textTimeStamp.text = TimeUtils.timeToString(time)
         setEvents()
     }
 
     override fun enableDarkMode() {
-        layoutRootResult.background = context?.getDrawable(R.drawable.bg_rounded_black)
-        textResultFull.background = context?.getDrawable(R.drawable.bg_rounded_black)
-        buttonDetail.background = context?.getDrawable(R.drawable.bg_ripple_black)
-        buttonCancel.background = context?.getDrawable(R.drawable.bg_ripple_black)
+        layoutRootResult.background = context?.getDrawable(R.drawable.bg_rounded_dark)
+        textResultFull.background = context?.getDrawable(R.drawable.bg_rounded_dark)
+        buttonDetail.background = context?.getDrawable(R.drawable.bg_ripple_dark)
+        buttonCancel.background = context?.getDrawable(R.drawable.bg_ripple_dark)
     }
 
     override fun disableDarkMode() {
@@ -107,8 +113,10 @@ private constructor(
     companion object {
 
         private const val DETAIL_TAG = "Detail"
+        private const val PERCENT_CHAR = "%"
 
-        fun newInstance(image: Bitmap, type: String) = ResultDialogFragment(image, type)
+        fun newInstance(image: Bitmap, type: String, percent: Int, time: Long) =
+            ResultDialogFragment(image, type, percent, time)
     }
 
 }

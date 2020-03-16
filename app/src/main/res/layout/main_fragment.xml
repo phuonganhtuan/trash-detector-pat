@@ -54,18 +54,33 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/textHint"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="32dp"
+            android:layout_margin="24dp"
             android:gravity="center"
             android:text="@string/title_hint"
             android:textSize="16dp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="SpUsage" />
+
+        <ImageView
+            android:id="@+id/iconRecent"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/bg_ripple_white"
+            android:contentDescription="@null"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_recent"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textHint" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
