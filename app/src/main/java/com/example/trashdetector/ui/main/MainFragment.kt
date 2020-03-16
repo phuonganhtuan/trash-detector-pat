@@ -354,6 +354,7 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogAct
         )
         viewModel.insertHistory(history)
         CurrentDetection.createCurrentDetection(ImageUtils.getBitmap(image), type, percent)
+        if (!CurrentDetection.isNoRecent) iconRecent.visibility = View.VISIBLE
     }
 
     companion object {
