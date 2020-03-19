@@ -2,10 +2,10 @@ package com.example.trashdetector.ui.main
 
 import android.Manifest.permission.CAMERA
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
@@ -29,6 +29,8 @@ import com.example.trashdetector.data.model.Detection
 import com.example.trashdetector.data.model.History
 import com.example.trashdetector.data.repository.HistoryRepository
 import com.example.trashdetector.data.room.AppDatabase
+import com.example.trashdetector.tflite.ClassifyAsync
+import com.example.trashdetector.tflite.TfLiteHelper
 import com.example.trashdetector.theme.DarkModeInterface
 import com.example.trashdetector.theme.DarkModeUtil
 import com.example.trashdetector.ui.information.InformationFragment
@@ -36,16 +38,13 @@ import com.example.trashdetector.ui.result.CurrentDetection
 import com.example.trashdetector.ui.result.ResultDialogFragment
 import com.example.trashdetector.utils.Constants.APP_PATH
 import com.example.trashdetector.utils.Constants.DARK_MODE_FILE_NAME
-import com.example.trashdetector.utils.Constants.MODEL_NAME
 import com.example.trashdetector.utils.FileUtils
 import com.example.trashdetector.utils.ImageUtils
 import com.example.trashdetector.utils.ToastUtils
 import kotlinx.android.synthetic.main.main_fragment.*
 import org.tensorflow.lite.Interpreter
 import java.io.File
-import java.io.FileInputStream
-import java.nio.MappedByteBuffer
-import java.nio.channels.FileChannel
+import java.nio.ByteBuffer
 
 
 class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogActionsListener {
@@ -59,7 +58,7 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogAct
     private lateinit var cameraDevice: CameraDevice
     private lateinit var cameraCaptureSession: CameraCaptureSession
 
-    private val tflite by lazy { Interpreter(loadModelFile(activity!!)) }
+    private val tflite by lazy { Interpreter(TfLiteHelper.loadModelFile(activity!!)) }
 
     private val historyRepository by lazy {
         context?.let { HistoryRepository(AppDatabase.invoke(it).historyDao()) }
@@ -129,30 +128,22 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogAct
         disableButtons()
     }
 
-    private fun loadModelFile(activity: Activity): MappedByteBuffer {
-        val modelAsset = activity.assets.openFd(MODEL_NAME)
-        val descriptor = modelAsset.fileDescriptor
-        val inputStream = FileInputStream(descriptor)
-        val fileChannel: FileChannel = inputStream.channel
-        return fileChannel.map(
-            FileChannel.MapMode.READ_ONLY,
-            modelAsset.startOffset,
-            modelAsset.declaredLength
-        )
-    }
-
     private fun detectByModel(image: Image) {
         ClassifyAsync(image, tflite) { output ->
-            val result = output[0]
-            val maxIndex = result.indices.maxBy { result[it] } ?: -1
-            val detection = Detection(
-                image = ImageUtils.getBitmap(image),
-                type = typeArray[maxIndex],
-                percent = (result[maxIndex] * 100).toInt(),
-                time = System.currentTimeMillis()
-            )
-            displayResult(detection)
+            handleDetectResult(output, image)
         }.execute()
+    }
+
+    private fun handleDetectResult(output: Array<FloatArray>, image: Image) {
+        val result = output[0]
+        val maxIndex = result.indices.maxBy { result[it] } ?: -1
+        val detection = Detection(
+            image = ImageUtils.getBitmap(image),
+            type = typeArray[maxIndex],
+            percent = (result[maxIndex] * 100).toInt(),
+            time = System.currentTimeMillis()
+        )
+        displayResult(detection)
     }
 
     private fun initViewModel() {
@@ -350,7 +341,7 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogAct
         captureRequest.addTarget(imageReader.surface)
         captureRequest.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
         val imageAvailableListener = ImageAvailableListener { reader ->
-            beginDetection(reader.acquireLatestImage())
+            detectByModel(reader.acquireLatestImage())
         }
         imageReader.setOnImageAvailableListener(imageAvailableListener, null)
         cameraDevice.createCaptureSession(
@@ -365,8 +356,6 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogAct
             cameraHandler
         )
     }
-
-    private fun beginDetection(outputImage: Image) = detectByModel(outputImage)
 
     private fun displayResult(detection: Detection) {
         detectProgress.visibility = View.GONE
@@ -384,7 +373,7 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogAct
         val history = History(
             type = type,
             time = time.toString(),
-            image = ImageUtils.getStringFromBitmap(ImageUtils.resizeBitmap(120, image))
+            image = ImageUtils.getStringFromBitmap(image)
         )
         viewModel.insertHistory(history)
         CurrentDetection.createCurrentDetection(image, type, percent)

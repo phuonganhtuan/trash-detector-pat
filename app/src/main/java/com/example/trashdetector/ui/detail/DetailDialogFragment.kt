@@ -45,7 +45,6 @@ class DetailDialogFragment(private val type: Int, private var image: Bitmap?) : 
         val bg = context?.getDrawable(R.drawable.bg_gradient_orange)
         if (image != null) {
             imageTrash.setImageBitmap(image)
-            imageTrash.rotation = 90f
         } else {
             val image = context?.getDrawable(R.drawable.vo_co)
             imageTrash.setImageDrawable(image)
@@ -67,7 +66,6 @@ class DetailDialogFragment(private val type: Int, private var image: Bitmap?) : 
         val bg = context?.getDrawable(R.drawable.bg_gradient_green)
         if (image != null) {
             imageTrash.setImageBitmap(image)
-            imageTrash.rotation = 90f
         } else {
             val image = context?.getDrawable(R.drawable.huu_co)
             imageTrash.setImageDrawable(image)
@@ -89,7 +87,6 @@ class DetailDialogFragment(private val type: Int, private var image: Bitmap?) : 
         val bg = context?.getDrawable(R.drawable.bg_gradient_purple)
         if (image != null) {
             imageTrash.setImageBitmap(image)
-            imageTrash.rotation = 90f
         } else {
             val image = context?.getDrawable(R.drawable.tai_che)
             imageTrash.setImageDrawable(image)

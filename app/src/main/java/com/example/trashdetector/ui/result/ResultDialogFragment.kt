@@ -40,8 +40,6 @@ private constructor(
         if (DarkModeUtil.isDarkMode) enableDarkMode() else disableDarkMode()
         imageOutput.setImageBitmap(image)
         imageFullScreen.setImageBitmap(image)
-        imageOutput.rotation = 90f
-        imageFullScreen.rotation = 90f
         textResult.text = type
         textResultFull.text = type
         textPercent.text =
