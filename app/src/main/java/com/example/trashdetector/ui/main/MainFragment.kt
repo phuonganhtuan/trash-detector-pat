@@ -2,6 +2,7 @@ package com.example.trashdetector.ui.main
 
 import android.Manifest.permission.CAMERA
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -24,6 +25,7 @@ import com.example.trashdetector.MainActivity.Companion.PERMISSION_CAMERA_CODE
 import com.example.trashdetector.MainActivity.Companion.PERMISSION_WRITE_CODE
 import com.example.trashdetector.R
 import com.example.trashdetector.base.ViewModelFactory
+import com.example.trashdetector.data.model.Detection
 import com.example.trashdetector.data.model.History
 import com.example.trashdetector.data.repository.HistoryRepository
 import com.example.trashdetector.data.room.AppDatabase
@@ -34,11 +36,17 @@ import com.example.trashdetector.ui.result.CurrentDetection
 import com.example.trashdetector.ui.result.ResultDialogFragment
 import com.example.trashdetector.utils.Constants.APP_PATH
 import com.example.trashdetector.utils.Constants.DARK_MODE_FILE_NAME
+import com.example.trashdetector.utils.Constants.MODEL_NAME
 import com.example.trashdetector.utils.FileUtils
 import com.example.trashdetector.utils.ImageUtils
 import com.example.trashdetector.utils.ToastUtils
 import kotlinx.android.synthetic.main.main_fragment.*
+import org.tensorflow.lite.Interpreter
 import java.io.File
+import java.io.FileInputStream
+import java.nio.MappedByteBuffer
+import java.nio.channels.FileChannel
+
 
 class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogActionsListener {
 
@@ -50,6 +58,8 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogAct
     private lateinit var captureRequest: CaptureRequest.Builder
     private lateinit var cameraDevice: CameraDevice
     private lateinit var cameraCaptureSession: CameraCaptureSession
+
+    private val tflite by lazy { Interpreter(loadModelFile(activity!!)) }
 
     private val historyRepository by lazy {
         context?.let { HistoryRepository(AppDatabase.invoke(it).historyDao()) }
@@ -117,6 +127,32 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogAct
     override fun onDelayCreated() {
         cameraCaptureSession.close()
         disableButtons()
+    }
+
+    private fun loadModelFile(activity: Activity): MappedByteBuffer {
+        val modelAsset = activity.assets.openFd(MODEL_NAME)
+        val descriptor = modelAsset.fileDescriptor
+        val inputStream = FileInputStream(descriptor)
+        val fileChannel: FileChannel = inputStream.channel
+        return fileChannel.map(
+            FileChannel.MapMode.READ_ONLY,
+            modelAsset.startOffset,
+            modelAsset.declaredLength
+        )
+    }
+
+    private fun detectByModel(image: Image) {
+        ClassifyAsync(image, tflite) { output ->
+            val result = output[0]
+            val maxIndex = result.indices.maxBy { result[it] } ?: -1
+            val detection = Detection(
+                image = ImageUtils.getBitmap(image),
+                type = typeArray[maxIndex],
+                percent = (result[maxIndex] * 100).toInt(),
+                time = System.currentTimeMillis()
+            )
+            displayResult(detection)
+        }.execute()
     }
 
     private fun initViewModel() {
@@ -330,35 +366,34 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogAct
         )
     }
 
-    private fun beginDetection(outputImage: Image) {
-        val bitmapOutput = ImageUtils.getBitmap(outputImage)
-        val type = "Rác thải tái chế"
-        val percent = 95
-        val time = System.currentTimeMillis()
+    private fun beginDetection(outputImage: Image) = detectByModel(outputImage)
+
+    private fun displayResult(detection: Detection) {
         detectProgress.visibility = View.GONE
         cardCaptureEffect.visibility = View.GONE
         showResult(
-            bitmapOutput,
-            type,
-            percent,
-            time
+            detection.image,
+            detection.type,
+            detection.percent,
+            detection.time
         )
-        saveHistory(outputImage, type, percent, time)
+        saveHistory(detection.image, detection.type, detection.percent, detection.time)
     }
 
-    private fun saveHistory(image: Image, type: String, percent: Int, time: Long) {
+    private fun saveHistory(image: Bitmap, type: String, percent: Int, time: Long) {
         val history = History(
             type = type,
             time = time.toString(),
-            image = ImageUtils.getStringFromBitmap(ImageUtils.getBitmap(image))
+            image = ImageUtils.getStringFromBitmap(ImageUtils.resizeBitmap(120, image))
         )
         viewModel.insertHistory(history)
-        CurrentDetection.createCurrentDetection(ImageUtils.getBitmap(image), type, percent)
+        CurrentDetection.createCurrentDetection(image, type, percent)
         if (!CurrentDetection.isNoRecent) iconRecent.visibility = View.VISIBLE
     }
 
     companion object {
 
+        val typeArray = arrayOf("Rác thải hữu cơ", "Rác thải tái chế", "Rác thải vô cơ")
         private const val THREAD_NAME = "Camera"
         private const val RESULT_TAG = "Result"
         private const val INFORMATION_TAG = "Information"
