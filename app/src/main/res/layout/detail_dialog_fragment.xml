@@ -5,7 +5,8 @@
     android:id="@+id/layoutDetail"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    android:animationCache="true">
 
     <TextView
         android:id="@+id/textTitle"

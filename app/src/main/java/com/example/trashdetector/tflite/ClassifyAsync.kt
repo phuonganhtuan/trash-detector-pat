@@ -1,8 +1,7 @@
-package com.example.trashdetector.ui.main
+package com.example.trashdetector.tflite
 
 import android.media.Image
 import android.os.AsyncTask
-import android.util.Log
 import com.example.trashdetector.utils.ImageUtils
 import org.tensorflow.lite.Interpreter
 
@@ -19,7 +18,6 @@ class ClassifyAsync(
             ImageUtils.convertBitmapToByteBuffer(ImageUtils.getBitmap(image)),
             output
         )
-
         return output
     }
 

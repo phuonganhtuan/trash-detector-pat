@@ -35,7 +35,6 @@ class HistoryAdapter(diffCallback: HistoryDiffUtil = HistoryDiffUtil()) :
                 textType.text = itemData.type
                 textTimeStamp.text = TimeUtils.timeToString(itemData.time.toLong())
                 imageHistory.setImageBitmap(ImageUtils.getBitmap(itemData.image))
-                imageHistory.rotation = 90f
             }
         }
 

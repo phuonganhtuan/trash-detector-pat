@@ -23,6 +23,11 @@ class AboutDialogFragment private constructor() : DialogFragment(), DarkModeInte
         return inflater.inflate(R.layout.about_dialog_fragment, container, false)
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        dialog?.window?.attributes?.windowAnimations = R.style.PopupAnimation
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (DarkModeUtil.isDarkMode) enableDarkMode() else disableDarkMode()

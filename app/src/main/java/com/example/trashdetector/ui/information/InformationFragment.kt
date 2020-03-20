@@ -1,6 +1,10 @@
 package com.example.trashdetector.ui.information
 
 import android.app.Dialog
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -19,11 +23,14 @@ import com.example.trashdetector.theme.DarkModeUtil
 import com.example.trashdetector.ui.about.AboutDialogFragment
 import com.example.trashdetector.ui.detail.DetailDialogFragment
 import com.example.trashdetector.ui.main.OnDialogActionsListener
+import com.example.trashdetector.utils.InternetUtils
+import com.example.trashdetector.utils.ToastUtils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.information_fragment.*
 import kotlinx.android.synthetic.main.trash_item.view.*
+
 
 class InformationFragment private constructor() : BottomSheetDialogFragment(), DarkModeInterface {
 
@@ -43,6 +50,11 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (DarkModeUtil.isDarkMode) enableDarkMode() else disableDarkMode()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        dialog?.window?.attributes?.windowAnimations = R.style.BottomPopupAnimation
     }
 
     override fun onCreateView(
@@ -102,20 +114,24 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
         super.onDestroy()
     }
 
-    private fun setDarkItems() {
-        pages.background = context?.getDrawable(R.drawable.bg_dark)
-        iconDelete.background = context?.getDrawable(R.drawable.bg_ripple_black)
-        iconAbout.background = context?.getDrawable(R.drawable.bg_ripple_black)
-    }
-
     fun setOnDialogCancelListener(onDialogActionsListener: OnDialogActionsListener) {
         this.onDialogActionsListener = onDialogActionsListener
     }
 
+    private fun setDarkItems() {
+        val backRipple = context?.getDrawable(R.drawable.bg_ripple_black)
+        pages.background = context?.getDrawable(R.drawable.bg_dark)
+        iconDelete.background = backRipple
+        iconAbout.background = backRipple
+        textMore.background = context?.getDrawable(R.drawable.bg_ripple_orange_outlined_dark)
+    }
+
     private fun setLightItems() {
+        val whiteRipple = context?.getDrawable(R.drawable.bg_ripple_white)
         pages.background = context?.getDrawable(R.drawable.bg_light)
-        iconDelete.background = context?.getDrawable(R.drawable.bg_ripple_white)
-        iconAbout.background = context?.getDrawable(R.drawable.bg_ripple_white)
+        iconDelete.background = whiteRipple
+        iconAbout.background = whiteRipple
+        textMore.background = context?.getDrawable(R.drawable.bg_ripple_orange_outlined)
     }
 
     private fun initViewModel() {
@@ -181,28 +197,37 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
         cardTrash3.setOnClickListener {
             DetailDialogFragment(3, null).show(activity!!.supportFragmentManager, DETAIL_TAG)
         }
+        iconDelete.setOnClickListener { resetHistory() }
         iconAbout.setOnClickListener {
             AboutDialogFragment.newInstance().show(activity!!.supportFragmentManager, ABOUT_TAG)
         }
-        iconDelete.setOnClickListener { resetHistory() }
+        textMore.setOnClickListener { openWiki() }
+    }
+
+    private fun openWiki() = context?.run {
+        if (InternetUtils.isInternetAvailable(this)) {
+            InformationWebFragment.newInstance().show(activity!!.supportFragmentManager, WEB_TAG)
+        } else {
+            ToastUtils.showMessage(this, getString(R.string.msg_no_internet))
+        }
     }
 
     private fun resetHistory() {
         if (historyAdapter.currentList.isEmpty()) {
-            Toast.makeText(context, getString(R.string.title_empty_history), Toast.LENGTH_SHORT)
-                .show()
+            ToastUtils.showMessage(context, getString(R.string.title_empty_history))
             return
         }
         viewModel.resetHistories()
         historyAdapter.submitList(emptyList())
         textEmptyHistory.visibility = View.VISIBLE
-        Toast.makeText(context, getString(R.string.title_reset), Toast.LENGTH_SHORT).show()
+        ToastUtils.showMessage(context, getString(R.string.title_reset))
     }
 
     companion object {
 
         private const val ABOUT_TAG = "About"
         private const val DETAIL_TAG = "Detail"
+        private const val WEB_TAG = "Web"
 
         fun newInstance() = InformationFragment()
     }
