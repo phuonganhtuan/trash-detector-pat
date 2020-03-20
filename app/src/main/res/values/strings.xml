@@ -11,7 +11,7 @@
     <string name="title_cancel">Quay lại</string>
     <string name="title_trash_description">Rác thải đang là 1 vấn đề nghiêm trọng với các quốc gia trên thế giới, đặc biệt là nước ta. Do đó, việc phân loại rác thải tại nguồn là vô cùng quan trọng. Rác thải nguồn được phân làm 3 loại chính:</string>
     <string name="title_about">
-        Author:\nPhương Anh Tuấn (UET-VNU)\n\nỨng dụng: Trash Detector\nPhiên bản: 1.0
+        Tác giả:\nPhương Anh Tuấn\n(UET-VNU)\n\nỨng dụng: Trash Detector\nPhiên bản: 1.1
     </string>
     <string name="title_history">Lịch sử nhận diện</string>
     <string name="title_reset">Đã xóa lịch sử nhận diện</string>
@@ -23,6 +23,7 @@
     <string name="title_no_recent">Chưa ghi nhận lần nhận dạng nào</string>
     <string name="title_percent">Độ chính xác: %s%s</string>
     <string name="title_more">Nhiều hơn</string>
+    <string name="msg_no_internet">Không nhận thấy kết nối Internet</string>
 
     // Rác vô cơ
     <string name="des_1">Gạch đá, ly cốc, băng đĩa hỏng, …</string>

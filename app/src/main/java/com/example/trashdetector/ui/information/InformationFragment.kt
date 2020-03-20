@@ -1,6 +1,10 @@
 package com.example.trashdetector.ui.information
 
 import android.app.Dialog
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -19,11 +23,14 @@ import com.example.trashdetector.theme.DarkModeUtil
 import com.example.trashdetector.ui.about.AboutDialogFragment
 import com.example.trashdetector.ui.detail.DetailDialogFragment
 import com.example.trashdetector.ui.main.OnDialogActionsListener
+import com.example.trashdetector.utils.InternetUtils
+import com.example.trashdetector.utils.ToastUtils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.information_fragment.*
 import kotlinx.android.synthetic.main.trash_item.view.*
+
 
 class InformationFragment private constructor() : BottomSheetDialogFragment(), DarkModeInterface {
 
@@ -192,20 +199,23 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
         textMore.setOnClickListener { openWiki() }
     }
 
-    private fun openWiki() {
-        InformationWebFragment.newInstance().show(activity!!.supportFragmentManager, WEB_TAG)
+    private fun openWiki() = context?.run {
+        if (InternetUtils.isInternetAvailable(this)) {
+            InformationWebFragment.newInstance().show(activity!!.supportFragmentManager, WEB_TAG)
+        } else {
+            ToastUtils.showMessage(this, getString(R.string.msg_no_internet))
+        }
     }
 
     private fun resetHistory() {
         if (historyAdapter.currentList.isEmpty()) {
-            Toast.makeText(context, getString(R.string.title_empty_history), Toast.LENGTH_SHORT)
-                .show()
+            ToastUtils.showMessage(context, getString(R.string.title_empty_history))
             return
         }
         viewModel.resetHistories()
         historyAdapter.submitList(emptyList())
         textEmptyHistory.visibility = View.VISIBLE
-        Toast.makeText(context, getString(R.string.title_reset), Toast.LENGTH_SHORT).show()
+        ToastUtils.showMessage(context, getString(R.string.title_reset))
     }
 
     companion object {
