@@ -22,6 +22,7 @@
     <string name="title_do">Cách xử lý</string>
     <string name="title_no_recent">Chưa ghi nhận lần nhận dạng nào</string>
     <string name="title_percent">Độ chính xác: %s%s</string>
+    <string name="title_more">Nhiều hơn</string>
 
     // Rác vô cơ
     <string name="des_1">Gạch đá, ly cốc, băng đĩa hỏng, …</string>

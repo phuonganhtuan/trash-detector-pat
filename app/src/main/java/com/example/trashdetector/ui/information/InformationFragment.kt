@@ -102,20 +102,24 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
         super.onDestroy()
     }
 
-    private fun setDarkItems() {
-        pages.background = context?.getDrawable(R.drawable.bg_dark)
-        iconDelete.background = context?.getDrawable(R.drawable.bg_ripple_black)
-        iconAbout.background = context?.getDrawable(R.drawable.bg_ripple_black)
-    }
-
     fun setOnDialogCancelListener(onDialogActionsListener: OnDialogActionsListener) {
         this.onDialogActionsListener = onDialogActionsListener
     }
 
+    private fun setDarkItems() {
+        val backRipple = context?.getDrawable(R.drawable.bg_ripple_black)
+        pages.background = context?.getDrawable(R.drawable.bg_dark)
+        iconDelete.background = backRipple
+        iconAbout.background = backRipple
+        textMore.background = context?.getDrawable(R.drawable.bg_ripple_orange_outlined_dark)
+    }
+
     private fun setLightItems() {
+        val whiteRipple = context?.getDrawable(R.drawable.bg_ripple_white)
         pages.background = context?.getDrawable(R.drawable.bg_light)
-        iconDelete.background = context?.getDrawable(R.drawable.bg_ripple_white)
-        iconAbout.background = context?.getDrawable(R.drawable.bg_ripple_white)
+        iconDelete.background = whiteRipple
+        iconAbout.background = whiteRipple
+        textMore.background = context?.getDrawable(R.drawable.bg_ripple_orange_outlined)
     }
 
     private fun initViewModel() {
@@ -181,10 +185,15 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
         cardTrash3.setOnClickListener {
             DetailDialogFragment(3, null).show(activity!!.supportFragmentManager, DETAIL_TAG)
         }
+        iconDelete.setOnClickListener { resetHistory() }
         iconAbout.setOnClickListener {
             AboutDialogFragment.newInstance().show(activity!!.supportFragmentManager, ABOUT_TAG)
         }
-        iconDelete.setOnClickListener { resetHistory() }
+        textMore.setOnClickListener { openWiki() }
+    }
+
+    private fun openWiki() {
+        InformationWebFragment.newInstance().show(activity!!.supportFragmentManager, WEB_TAG)
     }
 
     private fun resetHistory() {
@@ -203,6 +212,7 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
 
         private const val ABOUT_TAG = "About"
         private const val DETAIL_TAG = "Detail"
+        private const val WEB_TAG = "Web"
 
         fun newInstance() = InformationFragment()
     }

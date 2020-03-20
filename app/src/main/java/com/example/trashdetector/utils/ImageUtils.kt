@@ -9,7 +9,6 @@ import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-
 object ImageUtils {
 
     private const val BATCH_SIZE = 1
