@@ -23,6 +23,11 @@ class DetailDialogFragment(private val type: Int, private var image: Bitmap?) : 
         return inflater.inflate(R.layout.detail_dialog_fragment, container, false)
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        dialog?.window?.attributes?.windowAnimations = R.style.PopupAnimation
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         displayDetail()

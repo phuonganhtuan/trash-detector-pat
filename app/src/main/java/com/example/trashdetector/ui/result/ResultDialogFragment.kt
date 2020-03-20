@@ -13,6 +13,7 @@ import com.example.trashdetector.theme.DarkModeInterface
 import com.example.trashdetector.theme.DarkModeUtil
 import com.example.trashdetector.ui.detail.DetailDialogFragment
 import com.example.trashdetector.ui.main.OnDialogActionsListener
+import com.example.trashdetector.utils.AnimationUtils
 import com.example.trashdetector.utils.TimeUtils
 import kotlinx.android.synthetic.main.result_dialog_fragment.*
 
@@ -33,6 +34,11 @@ private constructor(
     ): View? {
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         return inflater.inflate(R.layout.result_dialog_fragment, container, false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        dialog?.window?.attributes?.windowAnimations = R.style.PopupAnimation
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,10 +83,10 @@ private constructor(
             openDetail()
         }
         imageOutput.setOnClickListener {
-            cardFullScreen.visibility = View.VISIBLE
+            AnimationUtils.zoomImageFromThumb(cardOutput, cardFullScreen, layoutBound)
         }
         imageFullScreen.setOnClickListener {
-            cardFullScreen.visibility = View.GONE
+            AnimationUtils.zoomOutView(cardOutput, cardFullScreen, layoutBound)
         }
     }
 

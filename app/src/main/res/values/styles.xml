@@ -42,4 +42,18 @@
         <item name="android:foreground">?attr/selectableItemBackground</item>
     </style>
 
+    <style name="PopupAnimation">
+        <item name="android:windowEnterAnimation">@anim/zoom_in_anim</item>
+        <item name="android:windowExitAnimation">@anim/slide_down_anim</item>
+    </style>
+
+    <style name="BottomPopupAnimation">
+        <item name="android:windowExitAnimation">@anim/slide_down_anim</item>
+    </style>
+
+    <style name="SlideAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_up_anim</item>
+        <item name="android:windowExitAnimation">@anim/slide_down_anim</item>
+    </style>
+
 </resources>

@@ -52,6 +52,11 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
         if (DarkModeUtil.isDarkMode) enableDarkMode() else disableDarkMode()
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        dialog?.window?.attributes?.windowAnimations = R.style.BottomPopupAnimation
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

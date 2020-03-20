@@ -26,6 +26,11 @@ class InformationWebFragment private constructor() : DialogFragment(), DarkModeI
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.information_web_fragment, container, false)
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        dialog?.window?.attributes?.windowAnimations = R.style.SlideAnimation
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (DarkModeUtil.isDarkMode) enableDarkMode() else disableDarkMode()
