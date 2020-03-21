@@ -78,6 +78,7 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogAct
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         if (DarkModeUtil.isDarkMode) enableDarkMode() else disableDarkMode()
+        handleRecentIconVisible()
         initViewModel()
         prepareCamera()
         setEvents()
@@ -377,6 +378,10 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogAct
         )
         viewModel.insertHistory(history)
         CurrentDetection.createCurrentDetection(image, type, percent)
+        handleRecentIconVisible()
+    }
+
+    private fun handleRecentIconVisible() {
         if (!CurrentDetection.isNoRecent) iconRecent.visibility = View.VISIBLE
     }
 
