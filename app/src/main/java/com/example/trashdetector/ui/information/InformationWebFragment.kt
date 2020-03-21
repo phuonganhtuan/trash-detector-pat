@@ -9,9 +9,8 @@ import androidx.fragment.app.DialogFragment
 import com.example.trashdetector.R
 import com.example.trashdetector.theme.DarkModeInterface
 import com.example.trashdetector.theme.DarkModeUtil
-import com.example.trashdetector.utils.Constants.WIKI_URL
+import com.example.trashdetector.base.objects.Constants.WIKI_URL
 import kotlinx.android.synthetic.main.information_web_fragment.*
-
 
 class InformationWebFragment private constructor() : DialogFragment(), DarkModeInterface {
 

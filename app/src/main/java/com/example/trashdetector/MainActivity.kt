@@ -8,8 +8,8 @@ import androidx.core.app.ActivityCompat
 import com.example.trashdetector.theme.DarkModeInterface
 import com.example.trashdetector.theme.DarkModeUtil
 import com.example.trashdetector.ui.main.MainFragment
-import com.example.trashdetector.utils.Constants.APP_PATH
-import com.example.trashdetector.utils.Constants.DARK_MODE_FILE_NAME
+import com.example.trashdetector.base.objects.Constants.APP_PATH
+import com.example.trashdetector.base.objects.Constants.DARK_MODE_FILE_NAME
 import com.example.trashdetector.utils.FileUtils
 import java.io.File
 

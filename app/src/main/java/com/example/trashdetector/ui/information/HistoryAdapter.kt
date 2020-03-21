@@ -5,13 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.trashdetector.R
 import com.example.trashdetector.base.BaseAdapter
-import com.example.trashdetector.base.diffutil.BaseViewHolder
+import com.example.trashdetector.base.BaseViewHolder
 import com.example.trashdetector.base.diffutil.HistoryDiffUtil
 import com.example.trashdetector.data.model.History
 import com.example.trashdetector.utils.ImageUtils
 import com.example.trashdetector.utils.TimeUtils
 import kotlinx.android.synthetic.main.history_item.view.*
-import kotlinx.android.synthetic.main.trash_item.view.*
 
 class HistoryAdapter(diffCallback: HistoryDiffUtil = HistoryDiffUtil()) :
     BaseAdapter<History, HistoryAdapter.HistoryViewHolder>(diffCallback) {

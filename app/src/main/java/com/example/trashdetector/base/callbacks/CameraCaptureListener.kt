@@ -1,4 +1,4 @@
-package com.example.trashdetector.ui.main
+package com.example.trashdetector.base.callbacks
 
 import android.hardware.camera2.CameraCaptureSession
 

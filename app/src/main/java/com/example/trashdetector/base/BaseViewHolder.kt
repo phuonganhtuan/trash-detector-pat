@@ -1,4 +1,4 @@
-package com.example.trashdetector.base.diffutil
+package com.example.trashdetector.base
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
@@ -14,5 +14,4 @@ abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemV
 
     abstract fun onBindData(itemData: T)
     abstract fun onHandleItemClick(mainItem: T)
-
 }
