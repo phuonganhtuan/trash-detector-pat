@@ -87,5 +87,4 @@ object ImageUtils {
     private fun resizeBitmap(size: Int, bitmap: Bitmap, isSquare: Boolean): Bitmap {
         return Bitmap.createScaledBitmap(bitmap, size, size * bitmap.height / bitmap.width, true)
     }
-
 }

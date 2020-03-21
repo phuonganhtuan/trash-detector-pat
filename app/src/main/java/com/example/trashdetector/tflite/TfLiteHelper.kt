@@ -1,7 +1,7 @@
 package com.example.trashdetector.tflite
 
 import android.app.Activity
-import com.example.trashdetector.utils.Constants
+import com.example.trashdetector.base.objects.Constants
 import java.io.FileInputStream
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel

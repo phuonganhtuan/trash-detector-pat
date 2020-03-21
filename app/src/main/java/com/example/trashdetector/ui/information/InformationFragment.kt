@@ -1,16 +1,11 @@
 package com.example.trashdetector.ui.information
 
 import android.app.Dialog
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -22,7 +17,7 @@ import com.example.trashdetector.theme.DarkModeInterface
 import com.example.trashdetector.theme.DarkModeUtil
 import com.example.trashdetector.ui.about.AboutDialogFragment
 import com.example.trashdetector.ui.detail.DetailDialogFragment
-import com.example.trashdetector.ui.main.OnDialogActionsListener
+import com.example.trashdetector.base.callbacks.OnDialogActionsListener
 import com.example.trashdetector.utils.InternetUtils
 import com.example.trashdetector.utils.ToastUtils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -30,7 +25,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.information_fragment.*
 import kotlinx.android.synthetic.main.trash_item.view.*
-
 
 class InformationFragment private constructor() : BottomSheetDialogFragment(), DarkModeInterface {
 

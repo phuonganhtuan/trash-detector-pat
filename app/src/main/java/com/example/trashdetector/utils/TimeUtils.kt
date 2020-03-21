@@ -15,5 +15,4 @@ object TimeUtils {
         val time = String.format("%02d:%02d", hour, minute)
         return "$time, $day-$month-$year"
     }
-
 }

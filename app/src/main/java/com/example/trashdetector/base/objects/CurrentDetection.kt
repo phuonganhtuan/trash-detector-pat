@@ -1,4 +1,4 @@
-package com.example.trashdetector.ui.result
+package com.example.trashdetector.base.objects
 
 import android.graphics.Bitmap
 import com.example.trashdetector.data.model.Detection

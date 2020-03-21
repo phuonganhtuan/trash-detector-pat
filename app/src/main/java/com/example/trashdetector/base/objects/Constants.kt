@@ -1,4 +1,4 @@
-package com.example.trashdetector.utils
+package com.example.trashdetector.base.objects
 
 import android.os.Environment
 

@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -107,5 +106,4 @@ class DetailDialogFragment(private val type: Int, private var image: Bitmap?) : 
     private fun setEvents() {
         buttonCancel.setOnClickListener { dialog?.cancel() }
     }
-
 }

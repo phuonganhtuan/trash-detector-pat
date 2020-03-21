@@ -12,7 +12,7 @@ import com.example.trashdetector.R
 import com.example.trashdetector.theme.DarkModeInterface
 import com.example.trashdetector.theme.DarkModeUtil
 import com.example.trashdetector.ui.detail.DetailDialogFragment
-import com.example.trashdetector.ui.main.OnDialogActionsListener
+import com.example.trashdetector.base.callbacks.OnDialogActionsListener
 import com.example.trashdetector.utils.AnimationUtils
 import com.example.trashdetector.utils.TimeUtils
 import kotlinx.android.synthetic.main.result_dialog_fragment.*

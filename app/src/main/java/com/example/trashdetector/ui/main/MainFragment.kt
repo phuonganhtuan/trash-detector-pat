@@ -5,7 +5,6 @@ import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
@@ -25,6 +24,7 @@ import com.example.trashdetector.MainActivity.Companion.PERMISSION_CAMERA_CODE
 import com.example.trashdetector.MainActivity.Companion.PERMISSION_WRITE_CODE
 import com.example.trashdetector.R
 import com.example.trashdetector.base.ViewModelFactory
+import com.example.trashdetector.base.callbacks.*
 import com.example.trashdetector.data.model.Detection
 import com.example.trashdetector.data.model.History
 import com.example.trashdetector.data.repository.HistoryRepository
@@ -34,20 +34,20 @@ import com.example.trashdetector.tflite.TfLiteHelper
 import com.example.trashdetector.theme.DarkModeInterface
 import com.example.trashdetector.theme.DarkModeUtil
 import com.example.trashdetector.ui.information.InformationFragment
-import com.example.trashdetector.ui.result.CurrentDetection
+import com.example.trashdetector.base.objects.CurrentDetection
 import com.example.trashdetector.ui.result.ResultDialogFragment
-import com.example.trashdetector.utils.Constants.APP_PATH
-import com.example.trashdetector.utils.Constants.DARK_MODE_FILE_NAME
+import com.example.trashdetector.base.objects.Constants.APP_PATH
+import com.example.trashdetector.base.objects.Constants.DARK_MODE_FILE_NAME
 import com.example.trashdetector.utils.FileUtils
 import com.example.trashdetector.utils.ImageUtils
 import com.example.trashdetector.utils.ToastUtils
 import kotlinx.android.synthetic.main.main_fragment.*
 import org.tensorflow.lite.Interpreter
 import java.io.File
-import java.nio.ByteBuffer
 
-
-class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogActionsListener {
+class MainFragment : Fragment(),
+    SurfaceListener, DarkModeInterface,
+    OnDialogActionsListener {
 
     private lateinit var viewModel: MainViewModel
 
@@ -65,9 +65,17 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogAct
     }
 
     private val stateCallback =
-        CameraStateCallback { cameraDevice -> startCameraPreview(cameraDevice) }
+        CameraStateCallback { cameraDevice ->
+            startCameraPreview(
+                cameraDevice
+            )
+        }
     private val captureStateCallback =
-        CaptureStateCallback { cameraSession -> updatePreview(cameraSession) }
+        CaptureStateCallback { cameraSession ->
+            updatePreview(
+                cameraSession
+            )
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -341,9 +349,10 @@ class MainFragment : Fragment(), SurfaceListener, DarkModeInterface, OnDialogAct
             cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
         captureRequest.addTarget(imageReader.surface)
         captureRequest.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
-        val imageAvailableListener = ImageAvailableListener { reader ->
-            detectByModel(reader.acquireLatestImage())
-        }
+        val imageAvailableListener =
+            ImageAvailableListener { reader ->
+                detectByModel(reader.acquireLatestImage())
+            }
         imageReader.setOnImageAvailableListener(imageAvailableListener, null)
         cameraDevice.createCaptureSession(
             outputSurfaces,
