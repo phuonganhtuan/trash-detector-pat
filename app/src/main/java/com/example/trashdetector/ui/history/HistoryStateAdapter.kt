@@ -2,6 +2,7 @@ package com.example.trashdetector.ui.history
 
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.example.trashdetector.base.callbacks.OnHistoryCancelListener
 import com.example.trashdetector.data.model.History
 
 class HistoryStateAdapter internal constructor(

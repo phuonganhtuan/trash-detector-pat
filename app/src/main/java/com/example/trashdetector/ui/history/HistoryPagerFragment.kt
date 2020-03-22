@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.example.trashdetector.R
+import com.example.trashdetector.base.callbacks.OnHistoriesPageChangeListener
+import com.example.trashdetector.base.callbacks.OnHistoryCancelListener
 import com.example.trashdetector.data.model.History
 import com.example.trashdetector.theme.DarkModeInterface
 import com.example.trashdetector.theme.DarkModeUtil
@@ -17,7 +19,9 @@ class HistoryPagerFragment private constructor(
     private val histories: List<History>,
     private val currentPosition: Int
 ) :
-    DialogFragment(), DarkModeInterface, OnHistoriesPageChangeListener, OnHistoryCancelListener {
+    DialogFragment(), DarkModeInterface,
+    OnHistoriesPageChangeListener,
+    OnHistoryCancelListener {
 
     private lateinit var historyAdapter: HistoryStateAdapter
     private var currentAdapterPosition = 0

@@ -18,6 +18,7 @@ import com.example.trashdetector.theme.DarkModeUtil
 import com.example.trashdetector.ui.about.AboutDialogFragment
 import com.example.trashdetector.ui.detail.DetailDialogFragment
 import com.example.trashdetector.base.callbacks.OnDialogActionsListener
+import com.example.trashdetector.base.callbacks.OnHistoryClickListener
 import com.example.trashdetector.ui.history.HistoryPagerFragment
 import com.example.trashdetector.utils.InternetUtils
 import com.example.trashdetector.utils.ToastUtils

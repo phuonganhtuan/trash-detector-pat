@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import com.example.trashdetector.R
 import com.example.trashdetector.base.BaseAdapter
 import com.example.trashdetector.base.BaseViewHolder
+import com.example.trashdetector.base.callbacks.OnHistoryClickListener
 import com.example.trashdetector.base.diffutil.HistoryDiffUtil
 import com.example.trashdetector.data.model.History
 import com.example.trashdetector.utils.ImageUtils

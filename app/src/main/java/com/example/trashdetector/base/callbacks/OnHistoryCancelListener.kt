@@ -1,4 +1,4 @@
-package com.example.trashdetector.ui.history
+package com.example.trashdetector.base.callbacks
 
 interface OnHistoryCancelListener {
     fun onHistoryCancel()

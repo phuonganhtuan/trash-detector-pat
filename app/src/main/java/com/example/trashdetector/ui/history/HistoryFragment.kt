@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.trashdetector.R
+import com.example.trashdetector.base.callbacks.OnHistoryCancelListener
 import com.example.trashdetector.data.model.History
 import com.example.trashdetector.theme.DarkModeInterface
 import com.example.trashdetector.theme.DarkModeUtil
