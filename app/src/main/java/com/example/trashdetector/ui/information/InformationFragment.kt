@@ -18,6 +18,7 @@ import com.example.trashdetector.theme.DarkModeUtil
 import com.example.trashdetector.ui.about.AboutDialogFragment
 import com.example.trashdetector.ui.detail.DetailDialogFragment
 import com.example.trashdetector.base.callbacks.OnDialogActionsListener
+import com.example.trashdetector.ui.history.HistoryPagerFragment
 import com.example.trashdetector.utils.InternetUtils
 import com.example.trashdetector.utils.ToastUtils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -26,11 +27,16 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.information_fragment.*
 import kotlinx.android.synthetic.main.trash_item.view.*
 
-class InformationFragment private constructor() : BottomSheetDialogFragment(), DarkModeInterface {
+class InformationFragment private constructor() : BottomSheetDialogFragment(), DarkModeInterface,
+    OnHistoryClickListener {
 
     private lateinit var viewModel: InformationViewModel
 
-    private val historyAdapter by lazy { HistoryAdapter() }
+    private val historyAdapter by lazy {
+        HistoryAdapter().apply {
+            onHistoryClickListener = this@InformationFragment
+        }
+    }
 
     private var onDialogActionsListener: OnDialogActionsListener? = null
 
@@ -76,6 +82,10 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
         if (DarkModeUtil.isDarkMode) setDarkItems() else setLightItems()
         pauseCamera()
         displayHistory()
+    }
+
+    override fun onHistoryItemCLicked(position: Int) {
+        openHistories(position)
     }
 
     private fun displayHistory() {
@@ -176,7 +186,7 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
 
     private fun observeData() = with(viewModel) {
         historyList.observe(viewLifecycleOwner, Observer {
-            historyAdapter.submitList(it.asReversed())
+            historyAdapter.submitList(it)
             if (it.isEmpty()) textEmptyHistory.visibility = View.VISIBLE
         })
     }
@@ -196,6 +206,13 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
             AboutDialogFragment.newInstance().show(activity!!.supportFragmentManager, ABOUT_TAG)
         }
         textMore.setOnClickListener { openWiki() }
+    }
+
+    private fun openHistories(position: Int) {
+        viewModel.historyList.value?.let {
+            HistoryPagerFragment.newInstance(it, position)
+                .show(activity!!.supportFragmentManager, HISTORY_TAG)
+        }
     }
 
     private fun openWiki() = context?.run {
@@ -222,6 +239,7 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
         private const val ABOUT_TAG = "About"
         private const val DETAIL_TAG = "Detail"
         private const val WEB_TAG = "Web"
+        private const val HISTORY_TAG = "History"
 
         fun newInstance() = InformationFragment()
     }
