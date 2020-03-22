@@ -24,6 +24,8 @@
     <string name="title_percent">Độ chính xác: %s%s</string>
     <string name="title_more">Nhiều hơn</string>
     <string name="msg_no_internet">Không nhận thấy kết nối Internet</string>
+    <string name="alert_delete_history">Xóa toàn bộ lịch sử nhận diện?</string>
+    <string name="title_delete">Xóa</string>
 
     // Rác vô cơ
     <string name="des_1">Gạch đá, ly cốc, băng đĩa hỏng, …</string>

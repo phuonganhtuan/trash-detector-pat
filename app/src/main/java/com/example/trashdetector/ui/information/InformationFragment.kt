@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.information_fragment.*
 import kotlinx.android.synthetic.main.trash_item.view.*
 
 class InformationFragment private constructor() : BottomSheetDialogFragment(), DarkModeInterface,
-    OnHistoryClickListener {
+    OnHistoryClickListener, OnDialogActionsListener {
 
     private lateinit var viewModel: InformationViewModel
 
@@ -89,6 +89,10 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
         openHistories(position)
     }
 
+    override fun onDeleteConfirmed() {
+        resetHistory()
+    }
+
     private fun displayHistory() {
         fetchDataHandler = Handler()
         fetchDataHandler.postDelayed({
@@ -124,18 +128,16 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
     }
 
     private fun setDarkItems() {
-        val backRipple = context?.getDrawable(R.drawable.bg_ripple_black)
         pages.background = context?.getDrawable(R.drawable.bg_dark)
-        iconDelete.background = backRipple
-        iconAbout.background = backRipple
+        iconDelete.background = context?.getDrawable(R.drawable.bg_ripple_black)
+        iconAbout.background = context?.getDrawable(R.drawable.bg_ripple_black)
         textMore.background = context?.getDrawable(R.drawable.bg_ripple_orange_outlined_dark)
     }
 
     private fun setLightItems() {
-        val whiteRipple = context?.getDrawable(R.drawable.bg_ripple_white)
         pages.background = context?.getDrawable(R.drawable.bg_light)
-        iconDelete.background = whiteRipple
-        iconAbout.background = whiteRipple
+        iconDelete.background = context?.getDrawable(R.drawable.bg_ripple_white)
+        iconAbout.background = context?.getDrawable(R.drawable.bg_ripple_white)
         textMore.background = context?.getDrawable(R.drawable.bg_ripple_orange_outlined)
     }
 
@@ -202,11 +204,20 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
         cardTrash3.setOnClickListener {
             DetailDialogFragment(3, null).show(activity!!.supportFragmentManager, DETAIL_TAG)
         }
-        iconDelete.setOnClickListener { resetHistory() }
+        iconDelete.setOnClickListener { openDeleteAlertDialog() }
         iconAbout.setOnClickListener {
             AboutDialogFragment.newInstance().show(activity!!.supportFragmentManager, ABOUT_TAG)
         }
         textMore.setOnClickListener { openWiki() }
+    }
+
+    private fun openDeleteAlertDialog() {
+        if (historyAdapter.currentList.isEmpty()) {
+            ToastUtils.showMessage(context, getString(R.string.title_empty_history))
+            return
+        }
+        DeleteHistoryDialogFragment.newInstance(this)
+            .show(activity!!.supportFragmentManager, DELETE_TAG)
     }
 
     private fun openHistories(position: Int) {
@@ -225,10 +236,6 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
     }
 
     private fun resetHistory() {
-        if (historyAdapter.currentList.isEmpty()) {
-            ToastUtils.showMessage(context, getString(R.string.title_empty_history))
-            return
-        }
         viewModel.resetHistories()
         historyAdapter.submitList(emptyList())
         textEmptyHistory.visibility = View.VISIBLE
@@ -241,6 +248,7 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
         private const val DETAIL_TAG = "Detail"
         private const val WEB_TAG = "Web"
         private const val HISTORY_TAG = "History"
+        private const val DELETE_TAG = "Delete"
 
         fun newInstance() = InformationFragment()
     }

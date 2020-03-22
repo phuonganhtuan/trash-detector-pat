@@ -2,6 +2,7 @@ package com.example.trashdetector.base.callbacks
 
 interface OnDialogActionsListener {
 
-    fun onDialogCanceled()
+    fun onDialogCanceled() {}
     fun onDelayCreated() {}
+    fun onDeleteConfirmed() {}
 }
