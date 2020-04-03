@@ -26,7 +26,7 @@ object ImageUtils {
     }
 
     fun getStringFromBitmap(bitmap: Bitmap): String {
-        val outputBitmap = resizeBitmap(120, bitmap, false)
+        val outputBitmap = resizeBitmap(300, bitmap, false)
         val byteArrayOutputStream = ByteArrayOutputStream()
         outputBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
         return Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT)

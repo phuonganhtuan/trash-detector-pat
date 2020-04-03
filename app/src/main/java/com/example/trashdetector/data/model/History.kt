@@ -13,5 +13,7 @@ data class History(
     @ColumnInfo(name = "time")
     var time: String = "",
     @ColumnInfo(name = "image")
-    var image: String = ""
+    var image: String = "",
+    @ColumnInfo(name = "percent")
+    var percent: Int = 0
 )

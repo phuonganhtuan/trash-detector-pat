@@ -30,7 +30,7 @@
         android:layout_height="32dp"
         android:layout_alignTop="@id/textTitle"
         android:layout_alignBottom="@id/textTitle"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="12dp"
         android:layout_toEndOf="@id/textTitle"
         android:background="@drawable/bg_ripple_white"
         android:contentDescription="@null"
@@ -44,7 +44,6 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/bg_ripple_white"
         android:contentDescription="@null"
         android:scaleType="centerInside"
         android:src="@drawable/ic_about" />

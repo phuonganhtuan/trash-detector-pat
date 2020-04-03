@@ -17,7 +17,7 @@ class InformationViewModel(
     private val _historyList = MutableLiveData<List<History>>()
 
     fun getHistories() = viewModelScope.launch {
-        _historyList.value = repository.getHistories()
+        _historyList.value = repository.getHistories().asReversed()
     }
 
     fun resetHistories() = viewModelScope.launch {

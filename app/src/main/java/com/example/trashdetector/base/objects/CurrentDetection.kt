@@ -1,6 +1,5 @@
 package com.example.trashdetector.base.objects
 
-import android.graphics.Bitmap
 import com.example.trashdetector.data.model.Detection
 
 object CurrentDetection {
@@ -8,12 +7,12 @@ object CurrentDetection {
     private lateinit var currentDetection: Detection
     var isNoRecent = true
 
-    fun createCurrentDetection(image: Bitmap, type: String, percent: Int) {
+    fun createCurrentDetection(detection: Detection) {
         currentDetection = Detection(
-            image = image,
-            type = type,
-            percent = percent,
-            time = System.currentTimeMillis()
+            image = detection.image,
+            type = detection.type,
+            percent = detection.percent,
+            time = detection.time
         )
         isNoRecent = false
     }

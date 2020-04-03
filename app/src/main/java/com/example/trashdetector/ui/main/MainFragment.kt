@@ -376,17 +376,18 @@ class MainFragment : Fragment(),
             detection.percent,
             detection.time
         )
-        saveHistory(detection.image, detection.type, detection.percent, detection.time)
+        saveHistory(detection)
     }
 
-    private fun saveHistory(image: Bitmap, type: String, percent: Int, time: Long) {
+    private fun saveHistory(detection: Detection) {
         val history = History(
-            type = type,
-            time = time.toString(),
-            image = ImageUtils.getStringFromBitmap(image)
+            type = detection.type,
+            time = detection.time.toString(),
+            image = ImageUtils.getStringFromBitmap(detection.image),
+            percent = detection.percent
         )
         viewModel.insertHistory(history)
-        CurrentDetection.createCurrentDetection(image, type, percent)
+        CurrentDetection.createCurrentDetection(detection)
         handleRecentIconVisible()
     }
 
