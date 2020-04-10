@@ -22,7 +22,7 @@
     <string name="title_do">Cách xử lý</string>
     <string name="title_no_recent">Chưa ghi nhận lần nhận dạng nào</string>
     <string name="title_percent">Độ chính xác: %s%s</string>
-    <string name="title_more">Nhiều hơn</string>
+    <string name="title_more">Wikipedia</string>
     <string name="msg_no_internet">Không nhận thấy kết nối Internet</string>
     <string name="alert_delete_history">Xóa toàn bộ lịch sử nhận diện?</string>
     <string name="title_delete">Xóa</string>
