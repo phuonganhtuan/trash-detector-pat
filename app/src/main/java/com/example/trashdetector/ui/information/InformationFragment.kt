@@ -190,7 +190,11 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
     private fun observeData() = with(viewModel) {
         historyList.observe(viewLifecycleOwner, Observer {
             historyAdapter.submitList(it)
-            if (it.isEmpty()) textEmptyHistory.visibility = View.VISIBLE
+            if (it.isEmpty()) {
+                textEmptyHistory.visibility = View.VISIBLE
+            } else {
+                iconDelete.visibility = View.VISIBLE
+            }
         })
     }
 
@@ -239,6 +243,7 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
         viewModel.resetHistories()
         historyAdapter.submitList(emptyList())
         textEmptyHistory.visibility = View.VISIBLE
+        iconDelete.visibility = View.GONE
         ToastUtils.showMessage(context, getString(R.string.title_reset))
     }
 
