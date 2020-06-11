@@ -73,7 +73,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginTop="24dp"
-            android:background="@drawable/bg_ripple_white"
+            android:background="@drawable/bg_ripple_grey"
             android:contentDescription="@null"
             android:scaleType="centerInside"
             android:src="@drawable/ic_recent"
@@ -104,13 +104,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
+        <ImageView
             android:id="@+id/buttonCapture"
-            style="@style/ItemShadowStyle"
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:layout_marginBottom="32dp"
             android:background="@drawable/ic_camera_button"
+            android:contentDescription="@null"
+            android:scaleType="center"
+            android:src="@drawable/ic_focus"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -134,7 +136,7 @@
             android:layout_height="48dp"
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="40dp"
-            android:background="@drawable/bg_ripple_white"
+            android:background="@drawable/bg_ripple_grey"
             android:contentDescription="@null"
             android:scaleType="centerInside"
             android:src="@drawable/ic_dark_mode"

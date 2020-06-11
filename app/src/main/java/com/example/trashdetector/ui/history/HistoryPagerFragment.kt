@@ -48,15 +48,19 @@ class HistoryPagerFragment private constructor(
     }
 
     override fun disableDarkMode() {
-        iconNext.background = context?.getDrawable(R.drawable.bg_ripple_white)
-        iconPrevious.background = context?.getDrawable(R.drawable.bg_ripple_white)
+        iconNext.background = context?.getDrawable(R.drawable.bg_ripple_grey)
+        iconPrevious.background = context?.getDrawable(R.drawable.bg_ripple_grey)
         layoutHistory.background = context?.getDrawable(R.drawable.bg_rounded)
+        iconNext.setImageResource(R.drawable.ic_next_dark)
+        iconPrevious.setImageResource(R.drawable.ic_previus_dark)
     }
 
     override fun enableDarkMode() {
         iconNext.background = context?.getDrawable(R.drawable.bg_ripple_dark)
         iconPrevious.background = context?.getDrawable(R.drawable.bg_ripple_dark)
         layoutHistory.background = context?.getDrawable(R.drawable.bg_rounded_dark)
+        iconNext.setImageResource(R.drawable.ic_next)
+        iconPrevious.setImageResource(R.drawable.ic_previus)
     }
 
     override fun onPageSelected(position: Int) {

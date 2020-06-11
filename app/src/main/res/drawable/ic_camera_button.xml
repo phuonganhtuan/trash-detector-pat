@@ -8,10 +8,10 @@
             <size
                 android:width="24dp"
                 android:height="24dp" />
-            <solid android:color="@color/colorPrimary" />
-            <stroke
-                android:width="12dp"
-                android:color="#60ab9aed" />
+            <gradient
+                android:angle="135"
+                android:endColor="#7c8bf2"
+                android:startColor="#6167db" />
         </shape>
     </item>
 </ripple>

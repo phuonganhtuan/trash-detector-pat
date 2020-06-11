@@ -8,7 +8,7 @@
     <LinearLayout
         android:id="@+id/layoutTrash"
         android:layout_width="match_parent"
-        android:layout_height="144dp"
+        android:layout_height="120dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,8 +19,8 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cardImage"
             style="@style/ItemShadowStyle"
-            android:layout_width="112dp"
-            android:layout_height="112dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             android:layout_marginStart="16dp"
             android:translationZ="16dp"
             app:cardBackgroundColor="@android:color/white"

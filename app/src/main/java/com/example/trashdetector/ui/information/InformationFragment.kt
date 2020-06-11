@@ -129,16 +129,20 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
 
     private fun setDarkItems() {
         pages.background = context?.getDrawable(R.drawable.bg_dark)
-        iconDelete.background = context?.getDrawable(R.drawable.bg_ripple_black)
-        iconAbout.background = context?.getDrawable(R.drawable.bg_ripple_black)
+        iconDelete.background = context?.getDrawable(R.drawable.bg_ripple_dark)
+        iconAbout.background = context?.getDrawable(R.drawable.bg_ripple_dark)
         textMore.background = context?.getDrawable(R.drawable.bg_ripple_orange_outlined_dark)
+        iconDelete.setImageResource(R.drawable.ic_clear)
+        iconAbout.setImageResource(R.drawable.ic_about)
     }
 
     private fun setLightItems() {
         pages.background = context?.getDrawable(R.drawable.bg_light)
-        iconDelete.background = context?.getDrawable(R.drawable.bg_ripple_white)
-        iconAbout.background = context?.getDrawable(R.drawable.bg_ripple_white)
+        iconDelete.background = context?.getDrawable(R.drawable.bg_ripple_grey)
+        iconAbout.background = context?.getDrawable(R.drawable.bg_ripple_grey)
         textMore.background = context?.getDrawable(R.drawable.bg_ripple_orange_outlined)
+        iconDelete.setImageResource(R.drawable.ic_clear_dark)
+        iconAbout.setImageResource(R.drawable.ic_about_dark)
     }
 
     private fun initViewModel() {

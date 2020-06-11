@@ -70,6 +70,7 @@ class MainFragment : Fragment(),
                 cameraDevice
             )
         }
+
     private val captureStateCallback =
         CaptureStateCallback { cameraSession ->
             updatePreview(
@@ -111,20 +112,22 @@ class MainFragment : Fragment(),
         context?.let {
             layoutTitle.background = it.getDrawable(R.drawable.bg_dark)
             layoutBottom.background = it.getDrawable(R.drawable.bg_dark)
-            iconDarkMode.background = it.getDrawable(R.drawable.bg_ripple_black)
-            iconRecent.background = it.getDrawable(R.drawable.bg_ripple_black)
+            iconDarkMode.background = it.getDrawable(R.drawable.bg_ripple_dark)
+            iconRecent.background = it.getDrawable(R.drawable.bg_ripple_dark)
         }
         iconDarkMode.setImageResource(R.drawable.ic_light_mode)
+        iconRecent.setImageResource(R.drawable.ic_recent)
     }
 
     override fun disableDarkMode() {
         context?.let {
             layoutTitle.background = it.getDrawable(R.drawable.bg_light)
             layoutBottom.background = it.getDrawable(R.drawable.bg_light)
-            iconDarkMode.background = it.getDrawable(R.drawable.bg_ripple_white)
-            iconRecent.background = it.getDrawable(R.drawable.bg_ripple_white)
+            iconDarkMode.background = it.getDrawable(R.drawable.bg_ripple_grey)
+            iconRecent.background = it.getDrawable(R.drawable.bg_ripple_grey)
         }
         iconDarkMode.setImageResource(R.drawable.ic_dark_mode)
+        iconRecent.setImageResource(R.drawable.ic_recent_dark)
     }
 
     override fun onDialogCanceled() {
