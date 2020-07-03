@@ -40,7 +40,6 @@ class MainActivity : AppCompatActivity(), DarkModeInterface {
             val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             requestPermissions(permissions, PERMISSION_WRITE_CODE)
         }
-
     }
 
     private fun getDarkMode() {
@@ -58,15 +57,23 @@ class MainActivity : AppCompatActivity(), DarkModeInterface {
 
     private fun getDarkModeStatus(): Boolean {
         var isDarkMode = false
-        val dir = File(APP_PATH)
-        if (dir.exists() && dir.isDirectory) {
-            val darkModeStatus = FileUtils.readStringFromFile(APP_PATH + DARK_MODE_FILE_NAME)
-            if (darkModeStatus == TRUE_STRING || darkModeStatus == FALSE_STRING) {
-                isDarkMode = darkModeStatus.toBoolean()
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            == PackageManager.PERMISSION_GRANTED
+        ) {
+            val dir = File(APP_PATH)
+            if (dir.exists() && dir.isDirectory) {
+                val darkModeStatus = FileUtils.readStringFromFile(APP_PATH + DARK_MODE_FILE_NAME)
+                if (darkModeStatus == TRUE_STRING || darkModeStatus == FALSE_STRING) {
+                    isDarkMode = darkModeStatus.toBoolean()
+                }
             }
+            DarkModeUtil.isDarkMode = isDarkMode
+            return isDarkMode
         }
-        DarkModeUtil.isDarkMode = isDarkMode
-        return isDarkMode
+        return false
     }
 
     private fun openDetectorPage() {

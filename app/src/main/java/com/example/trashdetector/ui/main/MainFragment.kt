@@ -95,8 +95,14 @@ class MainFragment : Fragment(),
 
     override fun onResume() {
         super.onResume()
-        startCameraThread()
-        if (cameraView.isAvailable) openCamera() else cameraView.surfaceTextureListener = this
+        if (ActivityCompat.checkSelfPermission(
+                context!!,
+                CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            startCameraThread()
+            if (cameraView.isAvailable) openCamera() else cameraView.surfaceTextureListener = this
+        }
     }
 
     override fun onPause() {
@@ -131,12 +137,16 @@ class MainFragment : Fragment(),
     }
 
     override fun onDialogCanceled() {
-        startCameraPreview(cameraDevice)
+        if (this::cameraDevice.isInitialized) {
+            startCameraPreview(cameraDevice)
+        }
         enableButtons()
     }
 
     override fun onDelayCreated() {
-        cameraCaptureSession.close()
+        if (this::cameraCaptureSession.isInitialized) {
+            cameraCaptureSession.close()
+        }
         disableButtons()
     }
 
@@ -198,18 +208,30 @@ class MainFragment : Fragment(),
     }
 
     private fun startCameraPreview(cameraDevice: CameraDevice) {
-        this.cameraDevice = cameraDevice
-        val surfaceTexture = cameraView.surfaceTexture
-        val surface = Surface(surfaceTexture)
-        captureRequest = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
-        captureRequest.addTarget(surface)
-        cameraDevice.createCaptureSession(listOf(surface), captureStateCallback, null)
+        if (ActivityCompat.checkSelfPermission(
+                context!!,
+                CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            this.cameraDevice = cameraDevice
+            val surfaceTexture = cameraView.surfaceTexture
+            val surface = Surface(surfaceTexture)
+            captureRequest = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+            captureRequest.addTarget(surface)
+            cameraDevice.createCaptureSession(listOf(surface), captureStateCallback, null)
+        }
     }
 
     private fun updatePreview(session: CameraCaptureSession) {
-        captureRequest.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
-        session.setRepeatingRequest(captureRequest.build(), null, cameraHandler)
-        cameraCaptureSession = session
+        if (ActivityCompat.checkSelfPermission(
+                context!!,
+                CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            captureRequest.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO)
+            session.setRepeatingRequest(captureRequest.build(), null, cameraHandler)
+            cameraCaptureSession = session
+        }
     }
 
     private fun startCameraThread() {
@@ -219,8 +241,10 @@ class MainFragment : Fragment(),
     }
 
     private fun stopCameraThread() {
-        handlerThread.quitSafely()
-        handlerThread.join()
+        if (this::handlerThread.isInitialized) {
+            handlerThread.quitSafely()
+            handlerThread.join()
+        }
     }
 
     private fun setEvents() {
@@ -298,6 +322,9 @@ class MainFragment : Fragment(),
         ) {
             isDarkMode = !isDarkMode
             updateLocalDarkMode()
+        } else {
+            ToastUtils.showMessage(context, getString(R.string.title_permission))
+            enableButtons()
         }
     }
 
@@ -317,9 +344,9 @@ class MainFragment : Fragment(),
         activity?.recreate()
     }
 
-    private fun onCaptureClick() {
+    private fun onCaptureClick() = context?.let { context ->
         if (ActivityCompat.checkSelfPermission(
-                context!!,
+                context,
                 CAMERA
             ) != PackageManager.PERMISSION_GRANTED
         ) {
@@ -327,13 +354,16 @@ class MainFragment : Fragment(),
             requestPermissions(permissions, PERMISSION_CAMERA_CODE)
         }
         if (ActivityCompat.checkSelfPermission(
-                context!!,
+                context,
                 CAMERA
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             cardCaptureEffect.visibility = View.VISIBLE
             detectProgress.visibility = View.VISIBLE
             detectTrash()
+        } else {
+            ToastUtils.showMessage(context, getString(R.string.title_permission))
+            enableButtons()
         }
     }
 
@@ -373,13 +403,10 @@ class MainFragment : Fragment(),
     private fun displayResult(detection: Detection) {
         detectProgress.visibility = View.GONE
         cardCaptureEffect.visibility = View.GONE
-        showResult(
-            detection.image,
-            detection.type,
-            detection.percent,
-            detection.time
-        )
-        saveHistory(detection)
+        with(detection) {
+            showResult(image, type, percent, time)
+            saveHistory(this)
+        }
     }
 
     private fun saveHistory(detection: Detection) {
