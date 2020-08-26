@@ -1,4 +1,4 @@
-package com.example.uidemo
+package com.example.trashdetector.utils
 
 import android.content.Context
 import android.util.AttributeSet
@@ -15,7 +15,7 @@ class OverScrollBehavior(context: Context, attributeSet: AttributeSet) :
         private const val OVER_SCROLL_AREA = 4
     }
 
-    private var overScrollY = 0
+    private var overScrollX = 0
 
     override fun onStartNestedScroll(
         coordinatorLayout: CoordinatorLayout,
@@ -25,7 +25,7 @@ class OverScrollBehavior(context: Context, attributeSet: AttributeSet) :
         axes: Int,
         type: Int
     ): Boolean {
-        overScrollY = 0
+        overScrollX = 0
         return true
     }
 
@@ -40,15 +40,15 @@ class OverScrollBehavior(context: Context, attributeSet: AttributeSet) :
         type: Int,
         consumed: IntArray
     ) {
-        if (dyUnconsumed == 0) {
+        if (dxUnconsumed == 0) {
             return
         }
-        overScrollY -= (dyUnconsumed / OVER_SCROLL_AREA)
+        overScrollX -= (dxUnconsumed / OVER_SCROLL_AREA)
         val group = target as ViewGroup
         val count = group.childCount
         for (i in 0 until count) {
             val view = group.getChildAt(i)
-            view.translationY = overScrollY.toFloat()
+            view.translationX = overScrollX.toFloat()
         }
     }
 
@@ -59,13 +59,24 @@ class OverScrollBehavior(context: Context, attributeSet: AttributeSet) :
         type: Int
     ) = moveToDefPosition(target)
 
+    override fun onNestedPreFling(
+        coordinatorLayout: CoordinatorLayout,
+        child: View,
+        target: View,
+        velocityX: Float,
+        velocityY: Float
+    ): Boolean {
+        moveToDefPosition(target)
+        return true
+    }
+
     private fun moveToDefPosition(target: View) {
         val group = target as ViewGroup
         val count = group.childCount
         for (i in 0 until count) {
             val view = group.getChildAt(i)
             ViewCompat.animate(view)
-                .translationY(0f)
+                .translationX(0f)
                 .setInterpolator(AccelerateDecelerateInterpolator())
                 .start()
         }

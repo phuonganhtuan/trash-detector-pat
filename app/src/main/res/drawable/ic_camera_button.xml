@@ -11,7 +11,7 @@
             <gradient
                 android:angle="135"
                 android:endColor="#7c8bf2"
-                android:startColor="#6167db" />
+                android:startColor="#7c8bf2" />
         </shape>
     </item>
 </ripple>

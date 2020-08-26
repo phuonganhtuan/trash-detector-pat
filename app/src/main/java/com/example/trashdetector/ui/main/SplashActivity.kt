@@ -28,10 +28,10 @@ class SplashActivity : AppCompatActivity() {
         handler2.postDelayed({
             view.visibility = View.VISIBLE
             textView.visibility = View.VISIBLE
-        }, 500)
+        }, 700)
         handler.postDelayed({
             startActivity(Intent(this, MainActivity::class.java))
             finish()
-        }, 1000)
+        }, 1200)
     }
 }

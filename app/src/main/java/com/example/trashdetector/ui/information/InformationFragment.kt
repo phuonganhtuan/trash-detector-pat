@@ -193,6 +193,7 @@ class InformationFragment private constructor() : BottomSheetDialogFragment(), D
 
     private fun observeData() = with(viewModel) {
         historyList.observe(viewLifecycleOwner, Observer {
+
             historyAdapter.submitList(it)
             if (it.isEmpty()) {
                 textEmptyHistory.visibility = View.VISIBLE

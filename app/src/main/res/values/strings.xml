@@ -11,7 +11,7 @@
     <string name="title_cancel">Quay lại</string>
     <string name="title_trash_description">Rác thải đang là 1 vấn đề nghiêm trọng với các quốc gia trên thế giới, đặc biệt là nước ta. Do đó, việc phân loại rác thải tại nguồn là vô cùng quan trọng. Rác thải nguồn được phân làm 3 loại chính:</string>
     <string name="title_about">
-        Tác giả:\nPhương Anh Tuấn\n(UET-VNU)\n\nỨng dụng: Trash Detector\nPhiên bản: 1.1
+        Phương Anh Tuấn\nTrash Detector v1.3
     </string>
     <string name="title_history">Lịch sử nhận diện</string>
     <string name="title_reset">Đã xóa lịch sử nhận diện</string>
@@ -51,4 +51,15 @@
     <string name="title_skip">Bỏ qua</string>
     <string name="title_back">Thoát</string>
     <string name="title_begin">Bắt đầu nhận diện</string>
+
+    // User Guide
+    <string name="title_main">Nhận diện và phân loại</string>
+    <string name="title_main_content">Phân loại rác thải sinh hoạt nhanh chóng và chính xác</string>
+    <string name="title_result_guide">Xem kết quả</string>
+    <string name="title_result_content">Xem chi tiết kết quả phân loại rác để dễ dàng ghi nhớ về sau</string>
+    <string name="title_his_guide">Lịch sử nhận diện</string>
+    <string name="title_his_content">Tra cứu lịch sử phân loại rác thải dễ dàng</string>
+    <string name="title_detail_guide">Thông tin chi tiết</string>
+    <string name="title_detail_content">Tra cứu thông tin từng loại rác để có cách xử lý phù hợp</string>
+    <string name="title_done">Và còn nhiều chức năng thú vị, hãy cùng bắt đầu khám phá!</string>
 </resources>

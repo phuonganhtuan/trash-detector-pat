@@ -1,9 +1,9 @@
 package com.example.trashdetector.data.model
 
-import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 
 data class Guider(
-    val image: Bitmap? = null,
-    val title: String = "",
-    val content: String? = ""
+    val imageId: Drawable?,
+    val title: String,
+    val content: String
 )

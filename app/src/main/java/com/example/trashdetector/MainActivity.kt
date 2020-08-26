@@ -27,14 +27,11 @@ class MainActivity : AppCompatActivity(), DarkModeInterface {
         if (!sharedPreferences.getBoolean("firstRun", true)) getDarkMode()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
-    }
-
-    override fun onResume() {
-        super.onResume()
         if (sharedPreferences.getBoolean("firstRun", true)) {
             val editor = sharedPreferences.edit()
             editor.putBoolean("firstRun", false).apply()
             openUserGuide()
+            return
         }
         if (savedInstanceState == null) openDetectorPage()
     }
@@ -49,6 +46,7 @@ class MainActivity : AppCompatActivity(), DarkModeInterface {
 
     private fun openUserGuide() {
         startActivity(Intent(this, UserGuideActivity::class.java))
+        finish()
     }
 
     private fun requestAppPermissions() {

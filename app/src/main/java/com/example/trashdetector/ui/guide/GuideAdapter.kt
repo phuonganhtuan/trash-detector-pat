@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trashdetector.R
 import com.example.trashdetector.data.model.Guider
+import kotlinx.android.synthetic.main.guide_item.view.*
 
 class GuideAdapter : RecyclerView.Adapter<GuideAdapter.GuideViewHolder>() {
 
@@ -25,7 +26,10 @@ class GuideAdapter : RecyclerView.Adapter<GuideAdapter.GuideViewHolder>() {
     class GuideViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bindData(guider: Guider) {
-
+            itemView.apply {
+                textGuideTitle.text = guider.content
+                imageGuide.setImageDrawable(guider.imageId)
+            }
         }
     }
 
