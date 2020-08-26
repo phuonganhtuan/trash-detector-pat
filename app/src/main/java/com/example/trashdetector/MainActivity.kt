@@ -1,6 +1,8 @@
 package com.example.trashdetector
 
 import android.Manifest
+import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,15 +12,31 @@ import com.example.trashdetector.theme.DarkModeUtil
 import com.example.trashdetector.ui.main.MainFragment
 import com.example.trashdetector.base.objects.Constants.APP_PATH
 import com.example.trashdetector.base.objects.Constants.DARK_MODE_FILE_NAME
+import com.example.trashdetector.ui.guide.UserGuideActivity
 import com.example.trashdetector.utils.FileUtils
 import java.io.File
 
 class MainActivity : AppCompatActivity(), DarkModeInterface {
 
+    private lateinit var sharedPreferences: SharedPreferences
+    private var savedInstanceState: Bundle? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         getDarkMode()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+        sharedPreferences = getSharedPreferences("com.example.trashdetector", MODE_PRIVATE)
+        this.savedInstanceState = savedInstanceState
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (sharedPreferences.getBoolean("firstRun", true)) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean("firstRun", false).apply()
+            openUserGuide()
+            return
+        }
         if (savedInstanceState == null) openDetectorPage()
     }
 
@@ -28,6 +46,11 @@ class MainActivity : AppCompatActivity(), DarkModeInterface {
 
     override fun enableDarkMode() {
         setTheme(R.style.AppThemeDark)
+    }
+
+    private fun openUserGuide() {
+        startActivity(Intent(this, UserGuideActivity::class.java))
+        finish()
     }
 
     private fun requestAppPermissions() {

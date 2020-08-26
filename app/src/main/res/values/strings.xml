@@ -48,4 +48,7 @@
     <string name="title_ex_3">- Thùng carton, sách báo cũ.\n- Hộp giấy, bì thư, bưu thiếp đã qua sử dụng.\n- Các loại vỏ lon nước ngọt/ lon bia/ vỏ hộp trà…\n- Các loại ghế nhựa, thau/ chậu nhựa, quần áo và vải cũ…</string>
     <string name="title_from_3">- Các loại giấy thải.\n- Các loại hộp/ chai/ vỏ lon thực phẩm bỏ đi.</string>
     <string name="title_do_3">Cần được tách riêng, đựng trong túi ny-lon hoặc túi vải để bán lại cho cơ sở tái chế.</string>
+    <string name="title_skip">Bỏ qua</string>
+    <string name="title_back">Thoát</string>
+    <string name="title_begin">Bắt đầu nhận diện</string>
 </resources>

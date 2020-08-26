@@ -102,6 +102,10 @@ class MainFragment : Fragment(),
         ) {
             startCameraThread()
             if (cameraView.isAvailable) openCamera() else cameraView.surfaceTextureListener = this
+        } else {
+            ActivityCompat.requestPermissions(
+                activity!!, arrayOf(CAMERA), PERMISSION_CAMERA_CODE
+            )
         }
     }
 
