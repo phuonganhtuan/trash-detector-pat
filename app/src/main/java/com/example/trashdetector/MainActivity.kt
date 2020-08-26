@@ -22,11 +22,11 @@ class MainActivity : AppCompatActivity(), DarkModeInterface {
     private var savedInstanceState: Bundle? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        getDarkMode()
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
         sharedPreferences = getSharedPreferences("com.example.trashdetector", MODE_PRIVATE)
         this.savedInstanceState = savedInstanceState
+        if (!sharedPreferences.getBoolean("firstRun", true)) getDarkMode()
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.main_activity)
     }
 
     override fun onResume() {
@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity(), DarkModeInterface {
             val editor = sharedPreferences.edit()
             editor.putBoolean("firstRun", false).apply()
             openUserGuide()
-            return
         }
         if (savedInstanceState == null) openDetectorPage()
     }
@@ -50,7 +49,6 @@ class MainActivity : AppCompatActivity(), DarkModeInterface {
 
     private fun openUserGuide() {
         startActivity(Intent(this, UserGuideActivity::class.java))
-        finish()
     }
 
     private fun requestAppPermissions() {

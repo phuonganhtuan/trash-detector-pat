@@ -95,17 +95,22 @@ class MainFragment : Fragment(),
 
     override fun onResume() {
         super.onResume()
-        if (ActivityCompat.checkSelfPermission(
-                context!!,
-                CAMERA
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            startCameraThread()
-            if (cameraView.isAvailable) openCamera() else cameraView.surfaceTextureListener = this
-        } else {
-            ActivityCompat.requestPermissions(
-                activity!!, arrayOf(CAMERA), PERMISSION_CAMERA_CODE
-            )
+        context?.let {
+            if (ActivityCompat.checkSelfPermission(
+                    it,
+                    CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                startCameraThread()
+                if (cameraView.isAvailable) openCamera() else cameraView.surfaceTextureListener =
+                    this
+            } else {
+                activity?.let { activityContext ->
+                    ActivityCompat.requestPermissions(
+                        activityContext, arrayOf(CAMERA), PERMISSION_CAMERA_CODE
+                    )
+                }
+            }
         }
     }
 
@@ -211,9 +216,9 @@ class MainFragment : Fragment(),
         }
     }
 
-    private fun startCameraPreview(cameraDevice: CameraDevice) {
+    private fun startCameraPreview(cameraDevice: CameraDevice) = context?.let {
         if (ActivityCompat.checkSelfPermission(
-                context!!,
+                it,
                 CAMERA
             ) == PackageManager.PERMISSION_GRANTED
         ) {
@@ -226,9 +231,9 @@ class MainFragment : Fragment(),
         }
     }
 
-    private fun updatePreview(session: CameraCaptureSession) {
+    private fun updatePreview(session: CameraCaptureSession) = context?.let {
         if (ActivityCompat.checkSelfPermission(
-                context!!,
+                it,
                 CAMERA
             ) == PackageManager.PERMISSION_GRANTED
         ) {
@@ -295,17 +300,17 @@ class MainFragment : Fragment(),
     }
 
     private fun enableButtons() {
-        iconRecent.isEnabled = true
-        buttonCapture.isEnabled = true
-        iconInformation.isEnabled = true
-        iconDarkMode.isEnabled = true
+        iconRecent?.isEnabled = true
+        buttonCapture?.isEnabled = true
+        iconInformation?.isEnabled = true
+        iconDarkMode?.isEnabled = true
     }
 
     private fun disableButtons() {
-        iconRecent.isEnabled = false
-        buttonCapture.isEnabled = false
-        iconInformation.isEnabled = false
-        iconDarkMode.isEnabled = false
+        iconRecent?.isEnabled = false
+        buttonCapture?.isEnabled = false
+        iconInformation?.isEnabled = false
+        iconDarkMode?.isEnabled = false
     }
 
     private fun handleDarkMode() = with(DarkModeUtil) {
